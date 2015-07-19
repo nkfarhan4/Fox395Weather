@@ -1,17 +1,37 @@
 package com.expert.weather;
 
+import android.graphics.Typeface;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class MainActivity extends ActionBarActivity {
-
+    private Toolbar toolbar;
+    TextView toolbarTitle;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        Typeface ttf = Typeface.createFromAsset(getAssets(), "fonts/silent_reaction.ttf");
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbarTitle = (TextView)toolbar.findViewById(R.id.toolbarTitle);
+
+
+        if (toolbar != null) {
+
+            toolbarTitle.setTypeface(ttf);
+            toolbarTitle.setText("Weather Eexpert");
+//            toolbar.setLogo(R.drawable.logo);
+            toolbar.setTitle("");
+
+            setSupportActionBar(toolbar);
+        }
     }
 
     @Override

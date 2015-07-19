@@ -9,7 +9,9 @@
     <color name="pink_pressed">#ec407a</color>
     <color name="blue_semi_transparent">#805677fc</color>
     <color name="blue_semi_transparent_pressed">#80738ffe</color>
-    <color name="primarColor">#18191A</color>
+    <color name="primarColor">#f1c40f</color>
+
+    <color name="primarColor2">#330066</color>
 
 
 </resources>
