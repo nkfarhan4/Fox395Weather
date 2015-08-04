@@ -27,6 +27,7 @@
 
 
                 <EditText
+                    android:text="Delhi"
                     android:id="@+id/edittext_area"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
