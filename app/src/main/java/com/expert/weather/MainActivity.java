@@ -18,6 +18,8 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import org.w3c.dom.Node;
+
 import zh.wang.android.apis.yweathergetter4a.WeatherInfo;
 import zh.wang.android.apis.yweathergetter4a.YahooWeather;
 import zh.wang.android.apis.yweathergetter4a.YahooWeatherExceptionListener;
@@ -50,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-        mProgressDialog.show();
+       // mProgressDialog.show();
 
         mTvTitle = (TextView) findViewById(R.id.textview_title);
         mTvWeather0 = (TextView) findViewById(R.id.textview_weather_info_0);
@@ -88,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
-        searchByGPS();
+        //searchByGPS();
     }
 
     @Override
@@ -132,25 +134,209 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             }
             for (int i = 0; i < YahooWeather.FORECAST_INFO_MAX_SIZE; i++) {
                 final LinearLayout forecastInfoLayout = (LinearLayout)
-                        getLayoutInflater().inflate(R.layout.forecastinfo, null);
-                final TextView tvWeather = (TextView) forecastInfoLayout.findViewById(R.id.textview_forecast_info);
+                        getLayoutInflater().inflate(R.layout.forecastinfo2, null);
+
+
+                final TextView txtDate = (TextView) forecastInfoLayout.findViewById(R.id.txtDate);
+                final TextView txtMonth = (TextView) forecastInfoLayout.findViewById(R.id.txtMonth);
+                final TextView txtTemp1 = (TextView) forecastInfoLayout.findViewById(R.id.txtTemp1);
+                final TextView txtTemp2 = (TextView) forecastInfoLayout.findViewById(R.id.txtTemp2);
+
+
                 final WeatherInfo.ForecastInfo forecastInfo = weatherInfo.getForecastInfoList().get(i);
-                tvWeather.setText("====== FORECAST " + (i+1) + " ======" + "\n" +
+
+
+                String date = forecastInfo.getForecastDay();
+                //String month = forecastInfo.getForecast();
+                String temp1 = "+"+forecastInfo.getForecastTempHigh();
+                String temp2 = "+"+forecastInfo.getForecastTempLow();
+
+                txtDate.setText(date);
+                txtTemp1.setText(temp1+"\u00b0");
+                txtTemp2.setText(temp2+"\u00b0");
+
+
+
+
+             /*   tvWeather.setText("====== FORECAST " + (i+1) + " ======" + "\n" +
                                 "date: " + forecastInfo.getForecastDate() + "\n" +
                                 "weather: " + forecastInfo.getForecastText() + "\n" +
                                 "low  temperature in ºC: " + forecastInfo.getForecastTempLow() + "\n" +
                                 "high temperature in ºC: " + forecastInfo.getForecastTempHigh() + "\n"
 //						           "low  temperature in ºF: " + forecastInfo.getForecastTempLowF() + "\n" +
 //				                   "high temperature in ºF: " + forecastInfo.getForecastTempHighF() + "\n"
-                );
+                );*/
                 final ImageView ivForecast = (ImageView) forecastInfoLayout.findViewById(R.id.imageview_forecast_info);
                 if (forecastInfo.getForecastConditionIcon() != null) {
                     ivForecast.setImageBitmap(forecastInfo.getForecastConditionIcon());
+
+
+
+                    String number = ""+forecastInfo.getForecastCode();
+                    setImage(ivForecast,number);
+
                 }
                 mWeatherInfosLayout.addView(forecastInfoLayout);
             }
         } else {
             setNoResultLayout();
+        }
+    }
+
+
+    private void setImage(ImageView img_weather,String no) {
+        int ii = Integer.parseInt(no);
+        switch (ii) {
+            case 0 :
+                img_weather.setImageResource(R.drawable.a0);
+                break;
+            case 1:
+                img_weather.setImageResource(R.drawable.a2);
+                break;
+            case 2:
+                img_weather.setImageResource(R.drawable.a2);
+                break;
+            case 3:
+                img_weather.setImageResource(R.drawable.a2);
+                break;
+            case 4:
+                img_weather.setImageResource(R.drawable.a2);
+                break;
+            case 5:
+                img_weather.setImageResource(R.drawable.a5);
+                break;
+            case 6:
+                img_weather.setImageResource(R.drawable.a5);
+                break;
+            case 7:
+                img_weather.setImageResource(R.drawable.a5);
+                break;
+            case 8:
+                img_weather.setImageResource(R.drawable.a8);
+                break;
+            case 9:
+                img_weather.setImageResource(R.drawable.a9);
+                break;
+            case 10:
+                img_weather.setImageResource(R.drawable.a9);
+                break;
+            case 11:
+                img_weather.setImageResource(R.drawable.a8);
+                break;
+            case 12:
+                img_weather.setImageResource(R.drawable.a8);
+                break;
+            case 13:
+                img_weather.setImageResource(R.drawable.a13);
+                break;
+            case 14:
+                img_weather.setImageResource(R.drawable.a13);
+                break;
+            case 15:
+                img_weather.setImageResource(R.drawable.a13);
+                break;
+            case 16:
+                img_weather.setImageResource(R.drawable.a13);
+                break;
+            case 17:
+                img_weather.setImageResource(R.drawable.a19);
+                break;
+            case 18:
+                img_weather.setImageResource(R.drawable.a19);
+                break;
+            case 19:
+                img_weather.setImageResource(R.drawable.a19);
+                break;
+            case 20:
+                img_weather.setImageResource(R.drawable.a19);
+                break;
+            case 21:
+                img_weather.setImageResource(R.drawable.a19);
+                break;
+            case 22:
+                img_weather.setImageResource(R.drawable.a19);
+                break;
+            case 23:
+                img_weather.setImageResource(R.drawable.a19);
+                break;
+            case 24:
+                img_weather.setImageResource(R.drawable.a24);
+                break;
+            case 25:
+                img_weather.setImageResource(R.drawable.a25);
+                break;
+            case 26:
+                img_weather.setImageResource(R.drawable.a26);
+                break;
+            case 27:
+                img_weather.setImageResource(R.drawable.a27);
+                break;
+            case 28:
+                img_weather.setImageResource(R.drawable.a28);
+                break;
+            case 29:
+                img_weather.setImageResource(R.drawable.a29);
+                break;
+            case 30:
+                img_weather.setImageResource(R.drawable.a30);
+                break;
+            case 31:
+                img_weather.setImageResource(R.drawable.a31);
+                break;
+            case 32:
+                img_weather.setImageResource(R.drawable.a32);
+                break;
+            case 33:
+                img_weather.setImageResource(R.drawable.a33);
+                break;
+            case 34:
+                img_weather.setImageResource(R.drawable.a34);
+                break;
+            case 35:
+                img_weather.setImageResource(R.drawable.a35);
+                break;
+            case 36:
+                img_weather.setImageResource(R.drawable.a36);
+                break;
+            case 37:
+                img_weather.setImageResource(R.drawable.a2);
+                break;
+            case 38:
+                img_weather.setImageResource(R.drawable.a2);
+                break;
+            case 39:
+                img_weather.setImageResource(R.drawable.a2);
+                break;
+            case 40:
+                img_weather.setImageResource(R.drawable.a2);
+                break;
+            case 41:
+                img_weather.setImageResource(R.drawable.a41);
+                break;
+            case 42:
+                img_weather.setImageResource(R.drawable.a41);
+                break;
+            case 43:
+                img_weather.setImageResource(R.drawable.a41);
+                break;
+            case 44:
+                img_weather.setImageResource(R.drawable.a44);
+                break;
+            case 45:
+                img_weather.setImageResource(R.drawable.a45);
+                break;
+            case 46:
+                img_weather.setImageResource(R.drawable.a46);
+                break;
+            case 47:
+                img_weather.setImageResource(R.drawable.a46);
+                break;
+            case 3200:
+                img_weather.setImageResource(R.drawable.a3200);
+                break;
+
+            default:
+                break;
         }
     }
 

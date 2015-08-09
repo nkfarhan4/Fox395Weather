@@ -137,14 +137,7 @@ public class YahooWeather implements LocationResult {
 	    return getInstance(connectTimeout, socketTimeout, false);
 	}
 	
-	/**
-	 * Get the YahooWeather instance.
-	 * Use this to query weather information from Yahoo.
-	 * @param connectTimeout in milliseconds, 5 seconds in default
-	 * @param socketTimeout in milliseconds, 5 seconds in default
-	 * @param isDebbugable set if you want some debug log in Logcat
-	 * @return YahooWeather instance
-	 */
+
 	public static YahooWeather getInstance(int connectTimeout, int socketTimeout, boolean isDebuggable) {
 	    YahooWeatherLog.setDebuggable(isDebuggable);
 	    NetworkUtils.getInstance().setConnectTimeout(connectTimeout);
@@ -161,13 +154,7 @@ public class YahooWeather implements LocationResult {
 		mNeedDownloadIcons = needDownloadIcons;
 	}
 	
-	/**
-	 * Set exception listener. 
-	 * If this is not set, stack info will be printed in logcat if {@link isDebuggable} is set to true.
-	 * Remember, these methodas may be called on background thread. Therefore, any UI related
-	 * activities must be post to UI thread, using {@link Handler} or something else.
-	 * @param exceptionListener
-	 */
+
 	public void setExceptionListener(final YahooWeatherExceptionListener exceptionListener) {
 	    this.mExceptionListener = exceptionListener;
 	    WOEIDUtils.getInstance().setExceptionListener(exceptionListener);
