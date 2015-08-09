@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     android:scrollbars="vertical" >
-
+<include layout="@layout/app_bar"/>
 
     <ScrollView
         android:id="@+id/scrollView1"
@@ -27,6 +27,8 @@
 
 
                 <EditText
+                    android:drawableRight="@drawable/ic_action_search"
+                    android:textColor="#494949"
                     android:text="Delhi"
                     android:id="@+id/edittext_area"
                     android:layout_width="0dp"
@@ -36,58 +38,115 @@
                     android:inputType="text" />
 
 
-                <Button
-                    android:id="@+id/search_button"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="Search" />
             </LinearLayout>
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:orientation="vertical" >
-
-
-                <TextView
-                    android:id="@+id/textview_title"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="TextView" />
-            </LinearLayout>
-
-
-            <TextView
-                android:id="@+id/textview_error_message"
-                android:layout_width="fill_parent"
-                android:layout_height="wrap_content"
-                android:layout_margin="10dp"
-                android:gravity="center"
-                android:text="TextView" />
-
 
 
 
             <LinearLayout
+                android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_margin="10dp"
                 android:gravity="center_vertical" >
 
 
+
                 <TextView
-                    android:id="@+id/textview_weather_info_0"
+                    android:textColor="@color/primarColor2"
+                    android:textSize="16dp"
+                    android:textStyle="bold"
+                    android:layout_gravity="center"
+                    android:id="@+id/mainTitle"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:text="TextView" />
 
 
-                <ImageView
-                    android:id="@+id/imageview_weather_info_0"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
+                <LinearLayout
+                    android:layout_marginTop="8dp"
+                    android:gravity="center"
+                    android:layout_gravity="center"
+                    android:orientation="horizontal"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content">
+
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+
+                        <ImageView
+                            android:gravity="center"
+                            android:layout_gravity="center"
+                            android:id="@+id/imageview_weather_info_0"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:id="@+id/txtWeather"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:textStyle="bold"
+                            android:textSize="24dp"
+                            android:layout_gravity="center"
+                            android:gravity="center"
+                            android:textColor="@color/primarColor"
+                            android:id="@+id/txtTemp"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+
+                    </LinearLayout>
+
+                    <LinearLayout
+                        android:layout_weight="1"
+                        android:orientation="vertical"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content">
+
+
+                        <TextView
+                            android:text="Wind"
+                            android:id="@+id/txtWindDirection"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+                        <TextView
+                            android:text="Wind"
+                            android:id="@+id/txtWind"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+
+                        <TextView
+                            android:text="Wind"
+                            android:id="@+id/txtWindSpeed"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:text="Wind"
+                            android:id="@+id/txtVisibility"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                        <TextView
+                            android:text="Wind"
+                            android:id="@+id/txtHumidty"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content" />
+
+                    </LinearLayout>
+
+                </LinearLayout>
+
+
             </LinearLayout>
 
 
@@ -104,6 +163,7 @@
 
 
     <Button
+        android:visibility="gone"
         android:id="@+id/gps_button"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

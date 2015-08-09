@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -29,14 +30,12 @@ import zh.wang.android.apis.yweathergetter4a.YahooWeatherInfoListener;
 public class MainActivity extends ActionBarActivity implements YahooWeatherInfoListener,
         YahooWeatherExceptionListener {
     private ImageView mIvWeather0;
-    private TextView mTvWeather0;
-    private TextView mTvErrorMessage;
-    private TextView mTvTitle;
+    private TextView mTvWeather0,txtWeather,mainTitle,txtTemp,txtWind,txtWindDirection,txtWindSpeed,txtVisibility,txtHumidty;
     private EditText mEtAreaOfCity;
-    private Button mBtSearch;
+
     private Button mBtGPS;
     private LinearLayout mWeatherInfosLayout;
-
+    private Toolbar toolbar;
 
     private YahooWeather mYahooWeather = YahooWeather.getInstance(5000, 5000, true);
 
@@ -48,35 +47,65 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
+        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        if (toolbar != null) {
+            toolbar.setTitle("Weather Expert");
+//            toolbar.setLogo(R.drawable.logo);
+            setSupportActionBar(toolbar);
+        }
+        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+
         mYahooWeather.setExceptionListener(this);
 
         mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage("Fetching Weather data... ");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
        // mProgressDialog.show();
 
-        mTvTitle = (TextView) findViewById(R.id.textview_title);
-        mTvWeather0 = (TextView) findViewById(R.id.textview_weather_info_0);
-        mTvErrorMessage = (TextView) findViewById(R.id.textview_error_message);
         mIvWeather0 = (ImageView) findViewById(R.id.imageview_weather_info_0);
 
         mEtAreaOfCity = (EditText) findViewById(R.id.edittext_area);
 
-        mBtSearch = (Button) findViewById(R.id.search_button);
-        mBtSearch.setOnClickListener(new View.OnClickListener() {
+        txtWeather =  (TextView) findViewById(R.id.txtWeather);
+        mainTitle =  (TextView) findViewById(R.id.mainTitle);
+        txtTemp =  (TextView) findViewById(R.id.txtTemp);
+        txtWind =  (TextView) findViewById(R.id.txtWind);
+        txtWindDirection=  (TextView) findViewById(R.id.txtWindDirection);
+        txtWindSpeed=  (TextView) findViewById(R.id.txtWindSpeed);
+        txtVisibility=  (TextView) findViewById(R.id.txtVisibility);
+        txtHumidty=  (TextView) findViewById(R.id.txtHumidty);
+
+
+        mEtAreaOfCity.setOnTouchListener(new View.OnTouchListener() {
             @Override
-            public void onClick(View v) {
-                String _location = mEtAreaOfCity.getText().toString();
-                if (!TextUtils.isEmpty(_location)) {
-                    InputMethodManager imm = (InputMethodManager)getSystemService(
-                            Context.INPUT_METHOD_SERVICE);
-                    imm.hideSoftInputFromWindow(mEtAreaOfCity.getWindowToken(), 0);
-                    searchByPlaceName(_location);
-                    showProgressDialog();
-                } else {
-                    Toast.makeText(getApplicationContext(), "location is not inputted", Toast.LENGTH_SHORT).show();
+            public boolean onTouch(View v, MotionEvent event) {
+                final int DRAWABLE_LEFT = 0;
+                final int DRAWABLE_TOP = 1;
+                final int DRAWABLE_RIGHT = 2;
+                final int DRAWABLE_BOTTOM = 3;
+
+                if (event.getAction() == MotionEvent.ACTION_UP) {
+                    if (event.getRawX() >= (mEtAreaOfCity.getRight() - mEtAreaOfCity.getCompoundDrawables()[DRAWABLE_RIGHT].getBounds().width())) {
+
+                        if (mEtAreaOfCity.getText().toString().trim().length() == 0) {
+                            Toast.makeText(MainActivity.this, "Please Enter any word for search !!!", Toast.LENGTH_SHORT).show();
+                        } else {
+                            String _location = mEtAreaOfCity.getText().toString();
+                            searchByPlaceName(_location);
+                            showProgressDialog();
+                        }
+
+                        return true;
+                    }
                 }
+
+                return false;
             }
         });
+
+
+
 
         mBtGPS = (Button) findViewById(R.id.gps_button);
         mBtGPS.setOnClickListener(new View.OnClickListener() {
@@ -90,7 +119,9 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
-        //searchByGPS();
+        String _location = mEtAreaOfCity.getText().toString();
+        searchByPlaceName(_location);
+        showProgressDialog();
     }
 
     @Override
@@ -112,23 +143,35 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                 mEtAreaOfCity.setText("YOUR CURRENT LOCATION");
             }
             mWeatherInfosLayout.removeAllViews();
-            mTvTitle.setText(
-                    weatherInfo.getTitle() + "\n"
-                            + weatherInfo.getWOEIDneighborhood() + ", "
-                            + weatherInfo.getWOEIDCounty() + ", "
-                            + weatherInfo.getWOEIDState() + ", "
-                            + weatherInfo.getWOEIDCountry());
-            mTvWeather0.setText("====== CURRENT ======" + "\n" +
+
+
+
+
+
+
+
+            txtWeather.setText(weatherInfo.getCurrentText());
+            mainTitle.setText(mEtAreaOfCity.getText().toString().trim());
+            txtTemp.setText("+" + weatherInfo.getCurrentTemp() + "\u00b0");
+
+            txtWind.setText("Wind speed: " + weatherInfo.getWindSpeed());
+
+
+            txtWindDirection.setText(weatherInfo.getCurrentConditionDate() );
+            txtWindSpeed.setText("Wind direction: " + weatherInfo.getWindDirection());
+            txtVisibility.setText("Visibility: " + weatherInfo.getAtmosphereVisibility());
+            txtHumidty.setText("Humidity: " + weatherInfo.getAtmosphereHumidity());
+           /* mTvWeather0.setText("====== CURRENT ======" + "\n" +
                             "date: " + weatherInfo.getCurrentConditionDate() + "\n" +
                             "weather: " + weatherInfo.getCurrentText() + "\n" +
-                            "temperature in ºC: " + weatherInfo.getCurrentTemp() + "\n" +
+                            "temperature in ï¿½C: " + weatherInfo.getCurrentTemp() + "\n" +
                             "wind chill: " + weatherInfo.getWindChill() + "\n" +
                             "wind direction: " + weatherInfo.getWindDirection() + "\n" +
                             "wind speed: " + weatherInfo.getWindSpeed() + "\n" +
                             "Humidity: " + weatherInfo.getAtmosphereHumidity() + "\n" +
                             "Pressure: " + weatherInfo.getAtmospherePressure() + "\n" +
                             "Visibility: " + weatherInfo.getAtmosphereVisibility()
-            );
+            );*/
             if (weatherInfo.getCurrentConditionIcon() != null) {
                 mIvWeather0.setImageBitmap(weatherInfo.getCurrentConditionIcon());
             }
@@ -161,10 +204,10 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
              /*   tvWeather.setText("====== FORECAST " + (i+1) + " ======" + "\n" +
                                 "date: " + forecastInfo.getForecastDate() + "\n" +
                                 "weather: " + forecastInfo.getForecastText() + "\n" +
-                                "low  temperature in ºC: " + forecastInfo.getForecastTempLow() + "\n" +
-                                "high temperature in ºC: " + forecastInfo.getForecastTempHigh() + "\n"
-//						           "low  temperature in ºF: " + forecastInfo.getForecastTempLowF() + "\n" +
-//				                   "high temperature in ºF: " + forecastInfo.getForecastTempHighF() + "\n"
+                                "low  temperature in ï¿½C: " + forecastInfo.getForecastTempLow() + "\n" +
+                                "high temperature in ï¿½C: " + forecastInfo.getForecastTempHigh() + "\n"
+//						           "low  temperature in ï¿½F: " + forecastInfo.getForecastTempLowF() + "\n" +
+//				                   "high temperature in ï¿½F: " + forecastInfo.getForecastTempHighF() + "\n"
                 );*/
                 final ImageView ivForecast = (ImageView) forecastInfoLayout.findViewById(R.id.imageview_forecast_info);
                 if (forecastInfo.getForecastConditionIcon() != null) {
@@ -367,15 +410,14 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
     private void setNormalLayout() {
         mWeatherInfosLayout.setVisibility(View.VISIBLE);
-        mTvTitle.setVisibility(View.VISIBLE);
-        mTvErrorMessage.setVisibility(View.INVISIBLE);
+
     }
 
     private void setNoResultLayout() {
-        mTvTitle.setVisibility(View.INVISIBLE);
+
+
+        Toast.makeText(MainActivity.this,"No Data Found !!!",Toast.LENGTH_SHORT).show();
         mWeatherInfosLayout.setVisibility(View.INVISIBLE);
-        mTvErrorMessage.setVisibility(View.VISIBLE);
-        mTvErrorMessage.setText("Sorry, no result returned");
         mProgressDialog.cancel();
     }
 
@@ -398,6 +440,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             mProgressDialog.cancel();
         }
         mProgressDialog = new ProgressDialog(MainActivity.this);
+
+        mProgressDialog.setMessage("Fetching Weather data... ");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
         mProgressDialog.show();
     }
