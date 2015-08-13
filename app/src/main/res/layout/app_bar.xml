@@ -26,7 +26,8 @@
         android:layout_height="wrap_content"/>
 
     <ImageView
-        android:layout_marginRight="8dp"
+
+        android:layout_marginRight="16dp"
         android:layout_gravity="right"
         android:src="@drawable/ic_location"
         android:gravity="center_vertical"

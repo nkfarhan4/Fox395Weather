@@ -1,12 +1,19 @@
 package com.expert.weather;
 
+import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.graphics.Typeface;
+import android.location.Address;
+import android.location.Geocoder;
+import android.location.Location;
+import android.location.LocationManager;
+import android.os.CountDownTimer;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -24,6 +31,9 @@ import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
 import org.w3c.dom.Node;
+
+import java.util.List;
+import java.util.Locale;
 
 import zh.wang.android.apis.yweathergetter4a.WeatherInfo;
 import zh.wang.android.apis.yweathergetter4a.YahooWeather;
@@ -44,9 +54,9 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     private YahooWeather mYahooWeather = YahooWeather.getInstance(5000, 5000, true);
     InterstitialAd interstitial;
     AdRequest adRequest;
-
+    String CITYNAME;
     private ProgressDialog mProgressDialog;
-
+    Location nwLocation;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -138,10 +148,93 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
-        String _location = mEtAreaOfCity.getText().toString();
-        searchByPlaceName(_location);
-        showProgressDialog();
+        getCellTowerInfo();
+
+
     }
+
+
+    public  void getCellTowerInfo() {
+
+        AppLocationService appLocationService = new AppLocationService(MainActivity.this);
+
+
+        nwLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
+
+
+                if (nwLocation != null) {
+                    double latitude = nwLocation.getLatitude();
+                    double longitude = nwLocation.getLongitude();
+                    String provoide = nwLocation.getProvider();
+
+
+                    try {
+                        Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+
+
+                        String cityName = addresses.get(0).getLocality();
+                        String countryName = addresses.get(0).getCountryName();
+
+
+                        CITYNAME  = cityName;
+
+
+               /* Toast.makeText(
+                        getApplicationContext(),
+                        "Mobile Location (NW): \nLatitude: " + latitude
+                                + "\nLongitude: " + longitude + "\ncityName:" + cityName + "\ncountryName:" + countryName,
+                        Toast.LENGTH_LONG).show();
+*/
+
+
+                      /*  Toast.makeText(
+                                getApplicationContext(),
+                                "Your Current city is :- "+CITYNAME,
+                                Toast.LENGTH_LONG).show();
+*/
+
+                        mEtAreaOfCity.setText(CITYNAME);
+
+
+
+                    }catch (Exception e){
+                        mEtAreaOfCity.setText("Delhi");
+                        CITYNAME = "Delhi";
+                        Log.e("exc in taking n/w", e.toString());
+                    }
+
+
+                    String _location = CITYNAME;
+                    searchByPlaceName(_location);
+                    showProgressDialog();
+
+                } else {
+                    mEtAreaOfCity.setText("Delhi");
+                    CITYNAME = "Delhi";
+                    String _location = CITYNAME;
+                    searchByPlaceName(_location);
+                    showProgressDialog();
+                    //Toast.makeText(MainActivity.this,"Network error !!!",Toast.LENGTH_SHORT).show();
+                }
+
+
+
+
+
+
+
+
+
+
+    }
+
+
+
+
+
+
+
 
     @Override
     protected void onDestroy() {
