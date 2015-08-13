@@ -19,6 +19,10 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
+
 import org.w3c.dom.Node;
 
 import zh.wang.android.apis.yweathergetter4a.WeatherInfo;
@@ -38,7 +42,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     private Toolbar toolbar;
 
     private YahooWeather mYahooWeather = YahooWeather.getInstance(5000, 5000, true);
-
+    InterstitialAd interstitial;
+    AdRequest adRequest;
 
     private ProgressDialog mProgressDialog;
 
@@ -77,6 +82,20 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         txtHumidty=  (TextView) findViewById(R.id.txtHumidty);
 
 
+
+        interstitial = new InterstitialAd(MainActivity.this);
+        interstitial.setAdUnitId("ca-app-pub-1878227272753934/8361723600");
+
+
+        AdView adView = (AdView) this.findViewById(R.id.adView);
+        // Request for Ads
+        adRequest = new AdRequest.Builder()
+                .build();
+
+        // Load ads into Banner Ads
+        adView.loadAd(adRequest);
+
+
         mEtAreaOfCity.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
@@ -107,15 +126,15 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
 
 
-        mBtGPS = (Button) findViewById(R.id.gps_button);
-        mBtGPS.setOnClickListener(new View.OnClickListener() {
+       // mBtGPS = (Button) findViewById(R.id.gps_button);
+       /* mBtGPS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 searchByGPS();
                 showProgressDialog();
             }
         });
-
+*/
 
         mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
