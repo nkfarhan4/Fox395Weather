@@ -3,6 +3,7 @@ package com.expert.weather;
 import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
@@ -70,6 +71,16 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             setSupportActionBar(toolbar);
         }
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+
+        ImageView imgSettings = (ImageView)toolbar.findViewById(R.id.imgSettings);
+        imgSettings.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(MainActivity.this,AdLocation.class);
+                startActivity(i);
+            }
+        });
+
 
         mYahooWeather.setExceptionListener(this);
 
