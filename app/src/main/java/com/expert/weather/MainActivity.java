@@ -3,6 +3,7 @@ package com.expert.weather;
 import android.app.LauncherActivity;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Typeface;
 import android.location.Address;
@@ -10,8 +11,10 @@ import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.CountDownTimer;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -31,6 +34,8 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
 import org.w3c.dom.Node;
 
 import java.util.List;
@@ -47,7 +52,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     private ImageView mIvWeather0;
     private TextView mTvWeather0,txtWeather,mainTitle,txtTemp,txtWind,txtWindDirection,txtWindSpeed,txtVisibility,txtHumidty;
     private EditText mEtAreaOfCity;
-
+    String LAT,LONG;
     private Button mBtGPS;
     private LinearLayout mWeatherInfosLayout;
     private Toolbar toolbar;
@@ -71,6 +76,14 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             setSupportActionBar(toolbar);
         }
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+
+        ImageView ic_location = (ImageView)toolbar.findViewById(R.id.ic_location);
+        ic_location.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                checkGPS();
+            }
+        });
 
         ImageView imgSettings = (ImageView)toolbar.findViewById(R.id.imgSettings);
         imgSettings.setOnClickListener(new View.OnClickListener() {
@@ -164,6 +177,98 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
     }
 
+
+    private void checkGPS() {
+
+
+        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+            gps_enabled = true;
+        } catch(Exception ex) {}
+
+
+        if(!gps_enabled) {
+            // notify user
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            dialog.setMessage("GPS Network Not Enabled");
+            dialog.setPositiveButton(this.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    startActivity(myIntent);
+                    //get gps
+                }
+            });
+            dialog.setNegativeButton(getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                }
+            });
+            dialog.show();
+        } else {
+            Log.e("ELSE", "ELSE");
+
+
+            callLocation();
+            //new CallLocation(getActivity()).execute();
+        }
+    }
+
+    private void callLocation(){
+
+        GPSTracker gps = new GPSTracker(this);
+
+        if (gps.canGetLocation()) { // gps enabled} // return boolean true/false
+
+            try {
+                LAT = "" + gps.getLatitude();
+                LONG = "" + gps.getLongitude();
+
+                Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+                List<Address> addresses = geocoder.getFromLocation(gps.getLatitude(), gps.getLongitude(), 1);
+                String cityName = addresses.get(0).getAddressLine(0);
+                String stateName = addresses.get(0).getAddressLine(1);
+                String countryName = addresses.get(0).getAddressLine(2);
+
+                Log.e("NEW LAT", gps.getLatitude() + "");
+                Log.e("NEW LONG", gps.getLongitude() + "");
+
+                Log.e("cityName", gps.getLatitude() + "");
+                Log.e("stateName", stateName + "");
+                Log.e("countryName", countryName + "");
+            }catch (Exception e){
+
+            }
+
+
+        }
+
+
+    }
+
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        try {
+            String val = getIntent().getStringExtra("place");
+            if (val.length() != 0) {
+                mEtAreaOfCity.setText(val);
+                String _location = mEtAreaOfCity.getText().toString();
+                searchByPlaceName(_location);
+                showProgressDialog();
+
+            }
+        }catch (Exception e){
+            Log.e("#### EXc",e.toString());
+        }
+    }
 
     public  void getCellTowerInfo() {
 
@@ -538,10 +643,13 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
     private void setNoResultLayout() {
 
+        try {
+            Toast.makeText(MainActivity.this, "No Data Found !!!", Toast.LENGTH_SHORT).show();
+            mWeatherInfosLayout.setVisibility(View.INVISIBLE);
+            mProgressDialog.cancel();
+        }catch (Exception e){
 
-        Toast.makeText(MainActivity.this,"No Data Found !!!",Toast.LENGTH_SHORT).show();
-        mWeatherInfosLayout.setVisibility(View.INVISIBLE);
-        mProgressDialog.cancel();
+        }
     }
 
     private void searchByGPS() {

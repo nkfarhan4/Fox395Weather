@@ -1,24 +1,35 @@
 package com.expert.weather;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
+import android.content.Intent;
+import android.database.Cursor;
 import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.AsyncTask;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
+import android.view.WindowManager;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.BaseAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ListView;
 import android.widget.SimpleAdapter;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -37,9 +48,12 @@ import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.net.URLEncoder;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 
 import zh.wang.android.apis.yweathergetter4a.WeatherInfo;
 import zh.wang.android.apis.yweathergetter4a.YahooWeather;
@@ -53,13 +67,21 @@ public class AdLocation extends ActionBarActivity {
     AutoCompleteTextView atvPlaces;
     PlacesTask placesTask;
     ParserTask parserTask;
+    ListView listView;
+    boolean isStationSelected;
+    ArrayAdapter adapter;
+    ArrayList<String> PLACES;
+    PLACES obj;
+    DBAdapter db;
 
+
+    ArrayList placeList = new ArrayList<>();
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.adcity);
-
+        db = new DBAdapter(AdLocation.this);
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
@@ -68,9 +90,37 @@ public class AdLocation extends ActionBarActivity {
             setSupportActionBar(toolbar);
         }
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        ImageView imgRefresh = (ImageView)toolbar.findViewById(R.id.imgRefresh);
+        imgRefresh.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                final AlertDialog.Builder dialog = new AlertDialog.Builder(AdLocation.this);
+                dialog.setMessage("Do you want to clear the data?");
+                dialog.setPositiveButton(getString(R.string.yes), new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                        //get gps
+                        db.open();
+                        db.deleteALL();
+                        db.close();
+
+                        getOldValues();
+                    }
+                });
+                dialog.setNegativeButton(getString(R.string.no), new DialogInterface.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+
+                    }
+                });
+                dialog.show();
+            }
+        });
 
 
-
+        listView = (ListView)findViewById(R.id.listView);
         AdView adView = (AdView) this.findViewById(R.id.adView);
         // Request for Ads
         //adRequest = new AdRequest.Builder() .build();
@@ -87,8 +137,7 @@ public class AdLocation extends ActionBarActivity {
 
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
-                placesTask = new PlacesTask();
-                placesTask.execute(s.toString());
+
             }
 
             @Override
@@ -99,11 +148,109 @@ public class AdLocation extends ActionBarActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                // TODO Auto-generated method stub
+                placesTask = new PlacesTask();
+                placesTask.execute(s.toString());
             }
         });
 
 
+        atvPlaces.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+
+
+                Log.e("### Val", adapterView.getAdapter().getItem(i).toString());
+                String value = adapterView.getAdapter().getItem(i).toString();
+                String tempValue = value;
+                db.open();
+                db.insertRecord(tempValue.substring(value.lastIndexOf("=") + 1, value.length() - 1));
+                db.close();
+
+                getOldValues();
+            }
+        });
+
+        listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+            @Override
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                Intent ii =  new Intent(AdLocation.this,MainActivity.class);
+
+                Log.e("### Val", adapterView.getAdapter().getItem(i).toString());
+                String value = adapterView.getAdapter().getItem(i).toString();
+
+                ii.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+                ii.putExtra("place",""+value);
+                startActivity(ii);
+                finish();
+            }
+        });
+    }
+
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        //Show soft-keyboard:
+        //getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_VISIBLE);
+        //hide keyboard :
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN);
+
+        getOldValues();
+    }
+
+    private void getOldValues(){
+        placeList = new ArrayList<>();
+
+        try {
+            db.open();
+            Cursor c = db.getALLLIST();
+            if (c.moveToFirst()) {
+                do {
+                    FetchData(c);
+                } while (c.moveToNext());
+            }
+            db.close();
+
+            adapter = new ArrayAdapter(AdLocation.this, android.R.layout.simple_list_item_1, placeList);
+            listView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+        } catch (Exception e) {
+            Log.e("### Exc", e.toString());
+        }
+
+
+
+    }
+
+
+    private void FetchData(Cursor c) {
+
+        String placeNAme = c.getString(1);
+        placeList.add(placeNAme);
+    }
+
+
+
+
+    private void setAdapter(){
+
+        try {
+
+            Log.e("#### size",""+obj.placeName.size());
+
+            PLACES = new ArrayList<>();
+            for(int i=0;i<obj.placeName.size();i++)
+            PLACES.add(obj.placeName.get(i));
+
+            adapter = new ArrayAdapter(AdLocation.this, android.R.layout.simple_list_item_1, PLACES);
+            listView.setAdapter(adapter);
+            adapter.notifyDataSetChanged();
+
+
+
+        }catch (Exception e){
+            Log.e("#### EXC",e.toString());
+        }
     }
 
 
@@ -240,6 +387,32 @@ public class AdLocation extends ActionBarActivity {
             atvPlaces.setAdapter(adapter);
         }
     }
+
+    private class CustomAdapter extends BaseAdapter{
+
+        @Override
+        public int getCount() {
+            return 0;
+        }
+
+        @Override
+        public Object getItem(int i) {
+            return null;
+        }
+
+        @Override
+        public long getItemId(int i) {
+            return 0;
+        }
+
+        @Override
+        public View getView(int i, View view, ViewGroup viewGroup) {
+            return null;
+        }
+    }
+
+
+
 
     //end of main class
 }

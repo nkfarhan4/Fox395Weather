@@ -57,6 +57,7 @@
 
 
                 <TextView
+                    android:padding="8dp"
                     android:textColor="#16a085"
                     android:textSize="18dp"
                     android:textStyle="bold"

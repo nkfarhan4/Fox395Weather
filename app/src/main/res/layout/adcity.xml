@@ -11,15 +11,24 @@
     <include layout="@layout/app_bar2"/>
 
     <LinearLayout
+        android:orientation="vertical"
         android:layout_margin="16dp"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
         <com.expert.weather.CustomAutoCompleteTextView
+            android:textColor="#494949"
             android:hint="Enter Place Here"
             android:id="@+id/atv_places"
             android:layout_width="match_parent"
             android:layout_height="wrap_content" />
+
+
+        <ListView
+            android:padding="8dp"
+            android:id="@+id/listView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"></ListView>
 
     </LinearLayout>
 

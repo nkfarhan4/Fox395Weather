@@ -21,13 +21,13 @@
         android:id="@+id/imgSettings"
         android:layout_marginRight="8dp"
         android:layout_gravity="right"
-        android:src="@drawable/ic_action_settings"
+        android:src="@drawable/ic_navigation_more_vert"
         android:gravity="center_vertical"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
     <ImageView
-
+        android:id="@+id/ic_location"
         android:layout_marginRight="16dp"
         android:layout_gravity="right"
         android:src="@drawable/ic_location"

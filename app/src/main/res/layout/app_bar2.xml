@@ -17,5 +17,12 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 
-
+    <ImageView
+        android:id="@+id/imgRefresh"
+        android:layout_marginRight="8dp"
+        android:layout_gravity="right"
+        android:src="@drawable/ic_navigation_refresh"
+        android:gravity="center_vertical"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"/>
 </android.support.v7.widget.Toolbar>
