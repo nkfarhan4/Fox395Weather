@@ -120,6 +120,7 @@ public class AdLocation extends ActionBarActivity {
         });
 
 
+
         listView = (ListView)findViewById(R.id.listView);
         AdView adView = (AdView) this.findViewById(R.id.adView);
         // Request for Ads
