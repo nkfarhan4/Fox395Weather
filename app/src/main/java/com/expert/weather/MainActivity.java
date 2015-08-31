@@ -56,17 +56,22 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     private Button mBtGPS;
     private LinearLayout mWeatherInfosLayout;
     private Toolbar toolbar;
-
+    int flagTemp =0;
     private YahooWeather mYahooWeather = YahooWeather.getInstance(5000, 5000, true);
     InterstitialAd interstitial;
     AdRequest adRequest;
     String CITYNAME;
     private ProgressDialog mProgressDialog;
     Location nwLocation;
+    TextView txtTempMain;
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+
+        //   \u2109 -- for degree F
+        // \u2103 -- for degree C
 
 
         toolbar = (Toolbar) findViewById(R.id.toolbar);
@@ -77,6 +82,9 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         }
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
 
+
+
+        txtTempMain = (TextView)toolbar.findViewById(R.id.txtTempMain);
         ImageView ic_location = (ImageView)toolbar.findViewById(R.id.ic_location);
         ic_location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -94,6 +102,21 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             }
         });
 
+        txtTempMain.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                   // 0 for C
+                    // 1 for F
+
+                    if(flagTemp == 0){
+                        txtTempMain.setText("\u2109");
+                        flagTemp = 1;
+                    }else{
+                        txtTempMain.setText("\u2103");
+                        flagTemp = 0;
+                    }
+            }
+        });
 
         mYahooWeather.setExceptionListener(this);
 
@@ -661,7 +684,12 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
     private void searchByPlaceName(String location) {
         mYahooWeather.setNeedDownloadIcons(true);
+
+        if(flagTemp==0)
         mYahooWeather.setUnit(YahooWeather.UNIT.CELSIUS);
+        else
+            mYahooWeather.setUnit(YahooWeather.UNIT.FAHRENHEIT);
+
         mYahooWeather.setSearchMode(YahooWeather.SEARCH_MODE.PLACE_NAME);
         mYahooWeather.queryYahooWeatherByPlaceName(getApplicationContext(), location, MainActivity.this);
     }
