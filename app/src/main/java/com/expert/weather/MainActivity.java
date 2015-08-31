@@ -694,6 +694,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         mYahooWeather.queryYahooWeatherByPlaceName(getApplicationContext(), location, MainActivity.this);
     }
 
+
+
     private void showProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.cancel();
