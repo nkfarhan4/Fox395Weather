@@ -49,6 +49,7 @@ import zh.wang.android.apis.yweathergetter4a.YahooWeatherInfoListener;
 
 public class MainActivity extends ActionBarActivity implements YahooWeatherInfoListener,
         YahooWeatherExceptionListener {
+
     private ImageView mIvWeather0;
     private TextView mTvWeather0,txtWeather,mainTitle,txtTemp,txtWind,txtWindDirection,txtWindSpeed,txtVisibility,txtHumidty;
     private EditText mEtAreaOfCity;
@@ -64,11 +65,15 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     private ProgressDialog mProgressDialog;
     Location nwLocation;
     TextView txtTempMain;
+
+    DBAdapter db;
+
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        db = new DBAdapter(MainActivity.this);
 
         //   \u2109 -- for degree F
         // \u2103 -- for degree C
@@ -86,6 +91,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         txtTempMain = (TextView)toolbar.findViewById(R.id.txtTempMain);
         ImageView ic_location = (ImageView)toolbar.findViewById(R.id.ic_location);
+
         ic_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -108,12 +114,19 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                    // 0 for C
                     // 1 for F
 
+
                     if(flagTemp == 0){
                         txtTempMain.setText("\u2109");
                         flagTemp = 1;
+                        String _location = mEtAreaOfCity.getText().toString();
+                        searchByPlaceName(_location);
+                        showProgressDialog();
                     }else{
                         txtTempMain.setText("\u2103");
                         flagTemp = 0;
+                        String _location = mEtAreaOfCity.getText().toString();
+                        searchByPlaceName(_location);
+                        showProgressDialog();
                     }
             }
         });
@@ -182,17 +195,6 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
 
 
-
-       // mBtGPS = (Button) findViewById(R.id.gps_button);
-       /* mBtGPS.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                searchByGPS();
-                showProgressDialog();
-            }
-        });
-*/
-
         mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
         getCellTowerInfo();
@@ -209,7 +211,6 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-            gps_enabled = true;
         } catch(Exception ex) {}
 
 
@@ -253,6 +254,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
                 Geocoder geocoder = new Geocoder(this, Locale.getDefault());
                 List<Address> addresses = geocoder.getFromLocation(gps.getLatitude(), gps.getLongitude(), 1);
+
                 String cityName = addresses.get(0).getAddressLine(0);
                 String stateName = addresses.get(0).getAddressLine(1);
                 String countryName = addresses.get(0).getAddressLine(2);
@@ -260,9 +262,14 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                 Log.e("NEW LAT", gps.getLatitude() + "");
                 Log.e("NEW LONG", gps.getLongitude() + "");
 
-                Log.e("cityName", gps.getLatitude() + "");
+                Log.e("cityName", cityName + "");
                 Log.e("stateName", stateName + "");
                 Log.e("countryName", countryName + "");
+
+                mEtAreaOfCity.setText(cityName);
+                searchByGPS();
+                showProgressDialog();
+
             }catch (Exception e){
 
             }
@@ -390,20 +397,23 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         hideProgressDialog();
         if (weatherInfo != null) {
             setNormalLayout();
-            if (mYahooWeather.getSearchMode() == YahooWeather.SEARCH_MODE.GPS) {
+
+
+         /*   if (mYahooWeather.getSearchMode() == YahooWeather.SEARCH_MODE.GPS) {
                 mEtAreaOfCity.setText("YOUR CURRENT LOCATION");
             }
+*/
             mWeatherInfosLayout.removeAllViews();
-
-
-
-
-
 
 
             txtWeather.setText(weatherInfo.getCurrentText());
             mainTitle.setText(mEtAreaOfCity.getText().toString().trim());
-            txtTemp.setText("+" + weatherInfo.getCurrentTemp() + "\u00b0");
+
+            if(flagTemp==1) {
+                txtTemp.setText("+" + C_To_F(weatherInfo.getCurrentTemp()) + "\u2109");
+            }else{
+                txtTemp.setText("+" + weatherInfo.getCurrentTemp() + "\u2103");
+            }
 
             txtWind.setText("Wind speed: " + weatherInfo.getWindSpeed());
 
@@ -426,6 +436,12 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             if (weatherInfo.getCurrentConditionIcon() != null) {
                 mIvWeather0.setImageBitmap(weatherInfo.getCurrentConditionIcon());
             }
+
+
+
+
+
+
             for (int i = 0; i < YahooWeather.FORECAST_INFO_MAX_SIZE; i++) {
                 final LinearLayout forecastInfoLayout = (LinearLayout)
                         getLayoutInflater().inflate(R.layout.forecastinfo2, null);
@@ -446,8 +462,17 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                 String temp2 = "+"+forecastInfo.getForecastTempLow();
 
                 txtDate.setText(date);
-                txtTemp1.setText(temp1+"\u00b0");
-                txtTemp2.setText(temp2+"\u00b0");
+
+
+                if(flagTemp==1) {
+                    txtTemp1.setText("+"+C_To_F(forecastInfo.getForecastTempHigh())+"\u2109");
+                    txtTemp2.setText("+"+C_To_F(forecastInfo.getForecastTempLow())+"\u2109");
+
+                }else{
+                    txtTemp1.setText(temp1+"\u2103");
+                    txtTemp2.setText(temp2+"\u2103");
+
+                }
 
 
 
@@ -471,11 +496,56 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
                 }
                 mWeatherInfosLayout.addView(forecastInfoLayout);
+
             }
+
+            db.open();
+
+           /* String col1Tile,col1TempCode,col1HighTemp,col1LowTemp;
+            for(int i=0;i<mWeatherInfosLayout.getChildCount();i++) {
+
+                final LinearLayout forecastInfoLayout = (LinearLayout)mWeatherInfosLayout.getChildAt(i);
+
+                final TextView txtDate = (TextView) forecastInfoLayout.findViewById(R.id.txtDate);
+                final ImageView ivForecast = (ImageView) forecastInfoLayout.findViewById(R.id.imageview_forecast_info);
+                final TextView txtTemp1 = (TextView) forecastInfoLayout.findViewById(R.id.txtTemp1);
+                final TextView txtTemp2 = (TextView) forecastInfoLayout.findViewById(R.id.txtTemp2);
+
+
+                if(i==0){
+                    col1Tile = txtDate.getText().toString();
+                    col1TempCode = txtDate.getText().toString();
+                    col1HighTemp = txtDate.getText().toString();
+                    col1HighTemp = txtDate.getText().toString();
+                }
+
+                db.insertOLDDATARecord(mEtAreaOfCity.getText().toString().trim(), txtTemp.getText().toString(), weatherInfo.getCurrentConditionIcon(),
+                        weatherInfo.getCurrentConditionDate(), weatherInfo.getWindSpeed(), weatherInfo.getWindDirection(), weatherInfo.getAtmosphereVisibility(), weatherInfo.getAtmosphereHumidity(),
+                        txtDate.getText(), forecastInfo.getForecastConditionIcon(), txtTemp1.getText(), txtTemp2.getText());
+            }
+            db.close();*/
+
+
+
+            //end of for loop
+
         } else {
+
             setNoResultLayout();
         }
     }
+
+
+
+    private int C_To_F(int celsius){
+        Log.e("### Val C",""+celsius);
+        double fahrenheit = (celsius * 9/5.0) +32;
+        int val = (int) Math.round(fahrenheit);
+
+        Log.e("### converteed C",""+val);
+        return val;
+    }
+
 
 
     private void setImage(ImageView img_weather,String no) {
@@ -685,10 +755,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     private void searchByPlaceName(String location) {
         mYahooWeather.setNeedDownloadIcons(true);
 
-        if(flagTemp==0)
         mYahooWeather.setUnit(YahooWeather.UNIT.CELSIUS);
-        else
-            mYahooWeather.setUnit(YahooWeather.UNIT.FAHRENHEIT);
 
         mYahooWeather.setSearchMode(YahooWeather.SEARCH_MODE.PLACE_NAME);
         mYahooWeather.queryYahooWeatherByPlaceName(getApplicationContext(), location, MainActivity.this);
