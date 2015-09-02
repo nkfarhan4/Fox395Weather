@@ -10,6 +10,8 @@ import android.location.Address;
 import android.location.Geocoder;
 import android.location.Location;
 import android.location.LocationManager;
+import android.net.ConnectivityManager;
+import android.net.NetworkInfo;
 import android.os.CountDownTimer;
 import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
@@ -51,13 +53,13 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         YahooWeatherExceptionListener {
 
     private ImageView mIvWeather0;
-    private TextView mTvWeather0,txtWeather,mainTitle,txtTemp,txtWind,txtWindDirection,txtWindSpeed,txtVisibility,txtHumidty;
+    private TextView mTvWeather0, txtWeather, mainTitle, txtTemp, txtWind, txtWindDirection, txtWindSpeed, txtVisibility, txtHumidty;
     private EditText mEtAreaOfCity;
-    String LAT,LONG;
+    String LAT, LONG;
     private Button mBtGPS;
     private LinearLayout mWeatherInfosLayout;
     private Toolbar toolbar;
-    int flagTemp =0;
+    int flagTemp = 0;
     private YahooWeather mYahooWeather = YahooWeather.getInstance(5000, 5000, true);
     InterstitialAd interstitial;
     AdRequest adRequest;
@@ -88,9 +90,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);
 
 
-
-        txtTempMain = (TextView)toolbar.findViewById(R.id.txtTempMain);
-        ImageView ic_location = (ImageView)toolbar.findViewById(R.id.ic_location);
+        txtTempMain = (TextView) toolbar.findViewById(R.id.txtTempMain);
+        ImageView ic_location = (ImageView) toolbar.findViewById(R.id.ic_location);
 
         ic_location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -99,11 +100,11 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             }
         });
 
-        ImageView imgSettings = (ImageView)toolbar.findViewById(R.id.imgSettings);
+        ImageView imgSettings = (ImageView) toolbar.findViewById(R.id.imgSettings);
         imgSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this,AdLocation.class);
+                Intent i = new Intent(MainActivity.this, AdLocation.class);
                 startActivity(i);
             }
         });
@@ -111,23 +112,23 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         txtTempMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                   // 0 for C
-                    // 1 for F
+                // 0 for C
+                // 1 for F
 
 
-                    if(flagTemp == 0){
-                        txtTempMain.setText("\u2109");
-                        flagTemp = 1;
-                        String _location = mEtAreaOfCity.getText().toString();
-                        searchByPlaceName(_location);
-                        showProgressDialog();
-                    }else{
-                        txtTempMain.setText("\u2103");
-                        flagTemp = 0;
-                        String _location = mEtAreaOfCity.getText().toString();
-                        searchByPlaceName(_location);
-                        showProgressDialog();
-                    }
+                if (flagTemp == 0) {
+                    txtTempMain.setText("\u2109");
+                    flagTemp = 1;
+                    String _location = mEtAreaOfCity.getText().toString();
+                    searchByPlaceName(_location);
+                    showProgressDialog();
+                } else {
+                    txtTempMain.setText("\u2103");
+                    flagTemp = 0;
+                    String _location = mEtAreaOfCity.getText().toString();
+                    searchByPlaceName(_location);
+                    showProgressDialog();
+                }
             }
         });
 
@@ -136,21 +137,20 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage("Fetching Weather data... ");
         mProgressDialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
-       // mProgressDialog.show();
+        // mProgressDialog.show();
 
         mIvWeather0 = (ImageView) findViewById(R.id.imageview_weather_info_0);
 
         mEtAreaOfCity = (EditText) findViewById(R.id.edittext_area);
 
-        txtWeather =  (TextView) findViewById(R.id.txtWeather);
-        mainTitle =  (TextView) findViewById(R.id.mainTitle);
-        txtTemp =  (TextView) findViewById(R.id.txtTemp);
-        txtWind =  (TextView) findViewById(R.id.txtWind);
-        txtWindDirection=  (TextView) findViewById(R.id.txtWindDirection);
-        txtWindSpeed=  (TextView) findViewById(R.id.txtWindSpeed);
-        txtVisibility=  (TextView) findViewById(R.id.txtVisibility);
-        txtHumidty=  (TextView) findViewById(R.id.txtHumidty);
-
+        txtWeather = (TextView) findViewById(R.id.txtWeather);
+        mainTitle = (TextView) findViewById(R.id.mainTitle);
+        txtTemp = (TextView) findViewById(R.id.txtTemp);
+        txtWind = (TextView) findViewById(R.id.txtWind);
+        txtWindDirection = (TextView) findViewById(R.id.txtWindDirection);
+        txtWindSpeed = (TextView) findViewById(R.id.txtWindSpeed);
+        txtVisibility = (TextView) findViewById(R.id.txtVisibility);
+        txtHumidty = (TextView) findViewById(R.id.txtHumidty);
 
 
         interstitial = new InterstitialAd(MainActivity.this);
@@ -194,7 +194,6 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         });
 
 
-
         mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
         getCellTowerInfo();
@@ -206,22 +205,23 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     private void checkGPS() {
 
 
-        LocationManager lm = (LocationManager)this.getSystemService(Context.LOCATION_SERVICE);
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         boolean gps_enabled = false;
 
         try {
             gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
-        } catch(Exception ex) {}
+        } catch (Exception ex) {
+        }
 
 
-        if(!gps_enabled) {
+        if (!gps_enabled) {
             // notify user
             final AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
             dialog.setMessage("GPS Network Not Enabled");
             dialog.setPositiveButton(this.getResources().getString(R.string.open_location_settings), new DialogInterface.OnClickListener() {
                 @Override
                 public void onClick(DialogInterface paramDialogInterface, int paramInt) {
-                    Intent myIntent = new Intent( Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    Intent myIntent = new Intent(Settings.ACTION_LOCATION_SOURCE_SETTINGS);
                     startActivity(myIntent);
                     //get gps
                 }
@@ -242,7 +242,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         }
     }
 
-    private void callLocation(){
+    private void callLocation() {
 
         GPSTracker gps = new GPSTracker(this);
 
@@ -270,7 +270,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                 searchByGPS();
                 showProgressDialog();
 
-            }catch (Exception e){
+            } catch (Exception e) {
 
             }
 
@@ -280,27 +280,61 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
     }
 
+    private boolean checkInternet() {
+        ConnectivityManager connectivityManager = (ConnectivityManager) getSystemService(MainActivity.CONNECTIVITY_SERVICE);
+        if (connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_WIFI).getState() == NetworkInfo.State.CONNECTED ||
+                connectivityManager.getNetworkInfo(ConnectivityManager.TYPE_MOBILE).getState() == NetworkInfo.State.CONNECTED) {
+            return true;
+        } else {
+            return false;
+        }
 
+
+    }
 
     @Override
     protected void onResume() {
         super.onResume();
 
-        try {
-            String val = getIntent().getStringExtra("place");
-            if (val.length() != 0) {
-                mEtAreaOfCity.setText(val);
-                String _location = mEtAreaOfCity.getText().toString();
-                searchByPlaceName(_location);
-                showProgressDialog();
+        if (checkInternet()) {
+            try {
+                String val = getIntent().getStringExtra("place");
+                if (val.length() != 0) {
+                    mEtAreaOfCity.setText(val);
+                    String _location = mEtAreaOfCity.getText().toString();
+                    searchByPlaceName(_location);
+                    showProgressDialog();
 
+                }
+            } catch (Exception e) {
+                Log.e("#### EXc", e.toString());
             }
-        }catch (Exception e){
-            Log.e("#### EXc",e.toString());
+        } else        {
+            Toast.makeText(MainActivity.this,"No Internet Connection",Toast.LENGTH_SHORT).show();
+
+            final AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            dialog.setMessage("No Internet Connection !!! Do you want to enable your internet?");
+            dialog.setPositiveButton(this.getResources().getString(R.string.sett), new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    Intent myIntent = new Intent(Settings.ACTION_SETTINGS);
+                    startActivity(myIntent);
+                    //get gps
+                }
+            });
+            dialog.setNegativeButton(getString(R.string.Cancel), new DialogInterface.OnClickListener() {
+
+                @Override
+                public void onClick(DialogInterface paramDialogInterface, int paramInt) {
+                    finish();
+                }
+            });
+            dialog.show();
         }
     }
 
-    public  void getCellTowerInfo() {
+
+    public void getCellTowerInfo() {
 
         AppLocationService appLocationService = new AppLocationService(MainActivity.this);
 
@@ -308,22 +342,22 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         nwLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
 
 
-                if (nwLocation != null) {
-                    double latitude = nwLocation.getLatitude();
-                    double longitude = nwLocation.getLongitude();
-                    String provoide = nwLocation.getProvider();
+        if (nwLocation != null) {
+            double latitude = nwLocation.getLatitude();
+            double longitude = nwLocation.getLongitude();
+            String provoide = nwLocation.getProvider();
 
 
-                    try {
-                        Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
-                        List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            try {
+                Geocoder geocoder = new Geocoder(MainActivity.this, Locale.getDefault());
+                List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
 
 
-                        String cityName = addresses.get(0).getLocality();
-                        String countryName = addresses.get(0).getCountryName();
+                String cityName = addresses.get(0).getLocality();
+                String countryName = addresses.get(0).getCountryName();
 
 
-                        CITYNAME  = cityName;
+                CITYNAME = cityName;
 
 
                /* Toast.makeText(
@@ -340,46 +374,31 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                                 Toast.LENGTH_LONG).show();
 */
 
-                        mEtAreaOfCity.setText(CITYNAME);
+                mEtAreaOfCity.setText(CITYNAME);
 
 
-
-                    }catch (Exception e){
-                        mEtAreaOfCity.setText("Delhi");
-                        CITYNAME = "Delhi";
-                        Log.e("exc in taking n/w", e.toString());
-                    }
-
-
-                    String _location = CITYNAME;
-                    searchByPlaceName(_location);
-                    showProgressDialog();
-
-                } else {
-                    mEtAreaOfCity.setText("Delhi");
-                    CITYNAME = "Delhi";
-                    String _location = CITYNAME;
-                    searchByPlaceName(_location);
-                    showProgressDialog();
-                    //Toast.makeText(MainActivity.this,"Network error !!!",Toast.LENGTH_SHORT).show();
-                }
+            } catch (Exception e) {
+                mEtAreaOfCity.setText("Delhi");
+                CITYNAME = "Delhi";
+                Log.e("exc in taking n/w", e.toString());
+            }
 
 
+            String _location = CITYNAME;
+            searchByPlaceName(_location);
+            showProgressDialog();
 
-
-
-
-
-
+        } else {
+            mEtAreaOfCity.setText("Delhi");
+            CITYNAME = "Delhi";
+            String _location = CITYNAME;
+            searchByPlaceName(_location);
+            showProgressDialog();
+            //Toast.makeText(MainActivity.this,"Network error !!!",Toast.LENGTH_SHORT).show();
+        }
 
 
     }
-
-
-
-
-
-
 
 
     @Override
@@ -409,16 +428,16 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             txtWeather.setText(weatherInfo.getCurrentText());
             mainTitle.setText(mEtAreaOfCity.getText().toString().trim());
 
-            if(flagTemp==1) {
+            if (flagTemp == 1) {
                 txtTemp.setText("+" + C_To_F(weatherInfo.getCurrentTemp()) + "\u2109");
-            }else{
+            } else {
                 txtTemp.setText("+" + weatherInfo.getCurrentTemp() + "\u2103");
             }
 
             txtWind.setText("Wind speed: " + weatherInfo.getWindSpeed());
 
 
-            txtWindDirection.setText(weatherInfo.getCurrentConditionDate() );
+            txtWindDirection.setText(weatherInfo.getCurrentConditionDate());
             txtWindSpeed.setText("Wind direction: " + weatherInfo.getWindDirection());
             txtVisibility.setText("Visibility: " + weatherInfo.getAtmosphereVisibility());
             txtHumidty.setText("Humidity: " + weatherInfo.getAtmosphereHumidity());
@@ -438,10 +457,6 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             }
 
 
-
-
-
-
             for (int i = 0; i < YahooWeather.FORECAST_INFO_MAX_SIZE; i++) {
                 final LinearLayout forecastInfoLayout = (LinearLayout)
                         getLayoutInflater().inflate(R.layout.forecastinfo2, null);
@@ -458,19 +473,19 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
                 String date = forecastInfo.getForecastDay();
                 //String month = forecastInfo.getForecast();
-                String temp1 = "+"+forecastInfo.getForecastTempHigh();
-                String temp2 = "+"+forecastInfo.getForecastTempLow();
+                String temp1 = "+" + forecastInfo.getForecastTempHigh();
+                String temp2 = "+" + forecastInfo.getForecastTempLow();
 
                 txtDate.setText(date);
 
 
-                if(flagTemp==1) {
-                    txtTemp1.setText("+"+C_To_F(forecastInfo.getForecastTempHigh())+"\u2109");
-                    txtTemp2.setText("+"+C_To_F(forecastInfo.getForecastTempLow())+"\u2109");
+                if (flagTemp == 1) {
+                    txtTemp1.setText("+" + C_To_F(forecastInfo.getForecastTempHigh()) + "\u2109");
+                    txtTemp2.setText("+" + C_To_F(forecastInfo.getForecastTempLow()) + "\u2109");
 
-                }else{
-                    txtTemp1.setText(temp1+"\u2103");
-                    txtTemp2.setText(temp2+"\u2103");
+                } else {
+                    txtTemp1.setText(temp1 + "\u2103");
+                    txtTemp2.setText(temp2 + "\u2103");
 
                 }
 
@@ -490,9 +505,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                     ivForecast.setImageBitmap(forecastInfo.getForecastConditionIcon());
 
 
-
-                    String number = ""+forecastInfo.getForecastCode();
-                    setImage(ivForecast,number);
+                    String number = "" + forecastInfo.getForecastCode();
+                    setImage(ivForecast, number);
 
                 }
                 mWeatherInfosLayout.addView(forecastInfoLayout);
@@ -526,7 +540,6 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             db.close();*/
 
 
-
             //end of for loop
 
         } else {
@@ -536,22 +549,20 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     }
 
 
-
-    private int C_To_F(int celsius){
-        Log.e("### Val C",""+celsius);
-        double fahrenheit = (celsius * 9/5.0) +32;
+    private int C_To_F(int celsius) {
+        Log.e("### Val C", "" + celsius);
+        double fahrenheit = (celsius * 9 / 5.0) + 32;
         int val = (int) Math.round(fahrenheit);
 
-        Log.e("### converteed C",""+val);
+        Log.e("### converteed C", "" + val);
         return val;
     }
 
 
-
-    private void setImage(ImageView img_weather,String no) {
+    private void setImage(ImageView img_weather, String no) {
         int ii = Integer.parseInt(no);
         switch (ii) {
-            case 0 :
+            case 0:
                 img_weather.setImageResource(R.drawable.a0);
                 break;
             case 1:
@@ -740,7 +751,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             Toast.makeText(MainActivity.this, "No Data Found !!!", Toast.LENGTH_SHORT).show();
             mWeatherInfosLayout.setVisibility(View.INVISIBLE);
             mProgressDialog.cancel();
-        }catch (Exception e){
+        } catch (Exception e) {
 
         }
     }
@@ -760,7 +771,6 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         mYahooWeather.setSearchMode(YahooWeather.SEARCH_MODE.PLACE_NAME);
         mYahooWeather.queryYahooWeatherByPlaceName(getApplicationContext(), location, MainActivity.this);
     }
-
 
 
     private void showProgressDialog() {
