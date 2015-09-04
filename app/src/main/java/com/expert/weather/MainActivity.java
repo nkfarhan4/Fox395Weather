@@ -32,6 +32,7 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
+import android.widget.ToggleButton;
 
 import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
@@ -56,7 +57,7 @@ import zh.wang.android.apis.yweathergetter4a.YahooWeatherInfoListener;
 public class MainActivity extends ActionBarActivity implements YahooWeatherInfoListener,
         YahooWeatherExceptionListener {
 
-    private ImageView mIvWeather0;
+    private ImageView mIvWeather0,ic_action_settings;
     private TextView txtTime,mTvWeather0, txtWeather, mainTitle, txtTemp, txtWind, txtWindDirection, txtWindSpeed, txtVisibility, txtHumidty;
     private EditText mEtAreaOfCity;
     String LAT, LONG;
@@ -71,7 +72,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     private ProgressDialog mProgressDialog;
     Location nwLocation;
     TextView txtTempMain;
-
+    ToggleButton toggle;
     DBAdapter db;
 
     @Override
@@ -93,9 +94,11 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         }
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);*/
 
+
+        ic_action_settings= (ImageView) findViewById(R.id.imgSettings);
         txtTime= (TextView) findViewById(R.id.txtTime);
         setDateandTime();
-        //txtTempMain = (TextView) toolbar.findViewById(R.id.txtTempMain);
+        txtTempMain = (TextView) findViewById(R.id.txtTempMain);
         ImageView ic_location = (ImageView) findViewById(R.id.ic_location);
 
         ic_location.setOnClickListener(new View.OnClickListener() {
@@ -114,7 +117,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             }
         });
 
-      /*  txtTempMain.setOnClickListener(new View.OnClickListener() {
+
+ txtTempMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 0 for C
@@ -135,7 +139,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                     showProgressDialog();
                 }
             }
-        });*/
+        });
 
         mYahooWeather.setExceptionListener(this);
 
