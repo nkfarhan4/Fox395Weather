@@ -480,13 +480,13 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                 txtTemp.setText("+" + weatherInfo.getCurrentTemp() + "\u2103");
             }
 
-            txtWind.setText("Wind speed: " + weatherInfo.getWindSpeed());
+            txtWind.setText("Wind speed: " + weatherInfo.getWindSpeed()+" km/h");
 
 
             txtWindDirection.setText(weatherInfo.getCurrentConditionDate());
             txtWindSpeed.setText("Wind direction: " + weatherInfo.getWindDirection());
-            txtVisibility.setText("Visibility: " + weatherInfo.getAtmosphereVisibility());
-            txtHumidty.setText("Humidity: " + weatherInfo.getAtmosphereHumidity());
+            txtVisibility.setText("Visibility: " + weatherInfo.getAtmosphereVisibility()+" km/h");
+            txtHumidty.setText("Humidity: " + weatherInfo.getAtmosphereHumidity()+" %");
            /* mTvWeather0.setText("====== CURRENT ======" + "\n" +
                             "date: " + weatherInfo.getCurrentConditionDate() + "\n" +
                             "weather: " + weatherInfo.getCurrentText() + "\n" +
