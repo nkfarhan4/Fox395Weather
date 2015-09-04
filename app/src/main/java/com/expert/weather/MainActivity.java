@@ -525,6 +525,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                 txtDate.setText(date);
 
 
+
                 if (flagTemp == 1) {
                     txtTemp1.setText("+" + C_To_F(forecastInfo.getForecastTempHigh()) + "\u2109");
                     txtTemp2.setText("+" + C_To_F(forecastInfo.getForecastTempLow()) + "\u2109");
