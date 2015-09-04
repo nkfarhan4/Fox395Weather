@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Address;
 import android.location.Geocoder;
@@ -40,6 +41,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Node;
 
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.Locale;
 
@@ -53,7 +57,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         YahooWeatherExceptionListener {
 
     private ImageView mIvWeather0;
-    private TextView mTvWeather0, txtWeather, mainTitle, txtTemp, txtWind, txtWindDirection, txtWindSpeed, txtVisibility, txtHumidty;
+    private TextView txtTime,mTvWeather0, txtWeather, mainTitle, txtTemp, txtWind, txtWindDirection, txtWindSpeed, txtVisibility, txtHumidty;
     private EditText mEtAreaOfCity;
     String LAT, LONG;
     private Button mBtGPS;
@@ -80,18 +84,19 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         //   \u2109 -- for degree F
         // \u2103 -- for degree C
 
-
+/*
         toolbar = (Toolbar) findViewById(R.id.toolbar);
         if (toolbar != null) {
             toolbar.setTitle("Weather Expert");
 //            toolbar.setLogo(R.drawable.logo);
             setSupportActionBar(toolbar);
         }
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+        toolbar.setNavigationIcon(R.mipmap.ic_launcher);*/
 
-
-        txtTempMain = (TextView) toolbar.findViewById(R.id.txtTempMain);
-        ImageView ic_location = (ImageView) toolbar.findViewById(R.id.ic_location);
+        txtTime= (TextView) findViewById(R.id.txtTime);
+        setDateandTime();
+        //txtTempMain = (TextView) toolbar.findViewById(R.id.txtTempMain);
+        ImageView ic_location = (ImageView) findViewById(R.id.ic_location);
 
         ic_location.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -100,7 +105,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             }
         });
 
-        ImageView imgSettings = (ImageView) toolbar.findViewById(R.id.imgSettings);
+        ImageView imgSettings = (ImageView) findViewById(R.id.imgSettings);
         imgSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -109,7 +114,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             }
         });
 
-        txtTempMain.setOnClickListener(new View.OnClickListener() {
+      /*  txtTempMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 0 for C
@@ -130,7 +135,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                     showProgressDialog();
                 }
             }
-        });
+        });*/
 
         mYahooWeather.setExceptionListener(this);
 
@@ -197,6 +202,43 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
         getCellTowerInfo();
+
+
+    }
+
+    private void setDateandTime(){
+
+
+        Thread t = new Thread() {
+
+
+            @Override
+            public void run() {
+                try {
+                    while (!isInterrupted()) {
+                        Thread.sleep(1000);
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                Calendar c = Calendar.getInstance();
+                                SimpleDateFormat df = new SimpleDateFormat("E dd-MM-yyyy hh:mm a");
+
+                                String formattedDate = df.format(c.getTime());
+
+
+                                txtTime.setText(formattedDate);
+                            }
+                        });
+                    }
+                } catch (InterruptedException e) {
+                }
+            }
+        };
+
+
+        t.start();
+
+
 
 
     }

@@ -8,7 +8,10 @@
     android:orientation="vertical"
 
     android:scrollbars="vertical">
-<include layout="@layout/app_bar"/>
+
+
+
+    <include layout="@layout/header"/>
 
     <ScrollView
         android:id="@+id/scrollView1"
