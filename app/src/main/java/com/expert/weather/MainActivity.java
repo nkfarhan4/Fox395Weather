@@ -506,7 +506,10 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                             "Visibility: " + weatherInfo.getAtmosphereVisibility()
             );*/
             if (weatherInfo.getCurrentConditionIcon() != null) {
-                mIvWeather0.setImageBitmap(weatherInfo.getCurrentConditionIcon());
+                String number = "" + weatherInfo.getCurrentCode();
+                setImage(mIvWeather0, number);
+                Log.e("###NUM", "" + number);
+                //mIvWeather0.setImageBitmap(weatherInfo.getCurrentConditionIcon());
             }
 
 
@@ -620,6 +623,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         Log.e("### converteed C", "" + val);
         return val;
     }
+
+
 
 
     private void setImage(ImageView img_weather, String no) {
