@@ -231,7 +231,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                             @Override
                             public void run() {
                                 Calendar c = Calendar.getInstance();
-                                SimpleDateFormat df = new SimpleDateFormat("E dd-MM-yyyy hh:mm a");
+                                SimpleDateFormat df = new SimpleDateFormat("MMM dd, yyyy hh:mm a");
 
                                 String formattedDate = df.format(c.getTime());
 
@@ -486,13 +486,13 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                 txtTemp.setText("+" + weatherInfo.getCurrentTemp() + "\u2103");
             }
 
-            txtWind.setText("Wind speed: " + weatherInfo.getWindSpeed()+" km/h");
+            txtWind.setText("" + weatherInfo.getWindSpeed()+" km/h");
 
 
             txtWindDirection.setText(weatherInfo.getCurrentConditionDate());
-            txtWindSpeed.setText("Wind direction: " + weatherInfo.getWindDirection());
-            txtVisibility.setText("Visibility: " + weatherInfo.getAtmosphereVisibility()+" km/h");
-            txtHumidty.setText("Humidity: " + weatherInfo.getAtmosphereHumidity()+" %");
+            txtWindSpeed.setText("" + weatherInfo.getWindDirection());
+            txtVisibility.setText("" + weatherInfo.getAtmosphereVisibility()+" km/h");
+            txtHumidty.setText("" + weatherInfo.getAtmosphereHumidity()+" %");
            /* mTvWeather0.setText("====== CURRENT ======" + "\n" +
                             "date: " + weatherInfo.getCurrentConditionDate() + "\n" +
                             "weather: " + weatherInfo.getCurrentText() + "\n" +

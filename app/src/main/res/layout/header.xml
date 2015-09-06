@@ -13,12 +13,19 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content">
 
-    <ImageView
-        android:layout_marginRight="8dp"
-        android:src="@drawable/ic_action_swap_vert"
-        android:id="@+id/imgSettings"
+    <TextView
+        android:layout_marginLeft="8dp"
+        android:layout_marginRight="16dp"
+        android:text="\u2103"
+        android:textSize="24dp"
+        android:textStyle="bold"
+        android:textColor="@color/white"
+        android:layout_gravity="center"
+        android:gravity="center"
+        android:id="@+id/txtTempMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
+
     <TextView
         android:id="@+id/txtTitle"
         android:textSize="24dp"
@@ -39,16 +46,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"/>
 
-    <TextView
-        android:layout_marginLeft="8dp"
-        android:layout_marginRight="16dp"
-        android:text="\u2103"
-        android:textSize="24dp"
-        android:textStyle="bold"
-        android:textColor="@color/white"
-        android:layout_gravity="center"
-        android:gravity="center"
-        android:id="@+id/txtTempMain"
+    <ImageView
+        android:layout_marginRight="8dp"
+        android:src="@drawable/ic_action_swap_vert"
+        android:id="@+id/imgSettings"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content" />
 

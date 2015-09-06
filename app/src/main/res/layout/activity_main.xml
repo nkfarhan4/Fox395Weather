@@ -4,7 +4,7 @@
     android:id="@+id/LinearLayout1"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="#ffff"
+    android:background="@color/background"
     android:orientation="vertical"
 
     android:scrollbars="vertical">
@@ -52,11 +52,12 @@
 
 
             <LinearLayout
+                android:layout_marginTop="8dp"
                 android:background="#ffff"
                 android:orientation="vertical"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
+                android:layout_marginBottom="16dp"
                 android:gravity="center_vertical" >
 
 
@@ -64,7 +65,7 @@
                 <TextView
                     android:padding="8dp"
                     android:textColor="@color/primarColor2"
-                    android:textSize="18dp"
+                    android:textSize="22dp"
                     android:textStyle="bold"
                     android:layout_gravity="center"
                     android:id="@+id/mainTitle"
@@ -84,7 +85,7 @@
 
 
                     <LinearLayout
-                        android:layout_weight="0.75"
+                        android:layout_weight="1.25"
                         android:orientation="vertical"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content">
@@ -177,17 +178,11 @@
             </LinearLayout>
 
 
-            <View
-                android:layout_marginLeft="16dp"
-                android:layout_marginRight="16dp"
-                android:layout_marginBottom="16dp"
-                android:layout_marginTop="8dp"
-                android:background="@color/primarColor2"
-                android:layout_width="match_parent"
-                android:layout_height="0.5dp"/>
+
+
 
             <LinearLayout
-
+                android:background="@color/background"
                 android:id="@+id/weather_infos"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
