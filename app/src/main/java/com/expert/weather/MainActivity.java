@@ -21,6 +21,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -99,7 +100,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
 
         TextView txtTitle = (TextView)findViewById(R.id.txtTitle);
-        txtTitle.setTypeface(tf,Typeface.NORMAL);
+        txtTitle.setTypeface(tf,Typeface.BOLD);
 
         ic_action_settings= (ImageView) findViewById(R.id.imgSettings);
         txtTime= (TextView) findViewById(R.id.txtTime);
@@ -510,6 +511,9 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
 
             for (int i = 0; i < YahooWeather.FORECAST_INFO_MAX_SIZE; i++) {
+
+
+
                 final LinearLayout forecastInfoLayout = (LinearLayout)
                         getLayoutInflater().inflate(R.layout.forecastinfo2, null);
 
@@ -562,6 +566,12 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                     setImage(ivForecast, number);
 
                 }
+                LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(LinearLayout.LayoutParams.WRAP_CONTENT, LinearLayout.LayoutParams.WRAP_CONTENT);
+                params.weight = 1.0f;
+                params.gravity = Gravity.CENTER;
+
+                mWeatherInfosLayout.setLayoutParams(params);
+
                 mWeatherInfosLayout.addView(forecastInfoLayout);
 
             }
