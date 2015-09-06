@@ -44,18 +44,18 @@ public class CustomDialog extends Dialog implements
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         requestWindowFeature(Window.FEATURE_NO_TITLE);
-        setContentView(R.layout.custom_alert_dialog);
+        setContentView(R.layout.adcity2);
 
-        toggle = (ToggleButton)findViewById(R.id.toggle);
-        topButton = (TextView) findViewById(R.id.topButton);
+     //   toggle = (ToggleButton)findViewById(R.id.toggle);
+      //  topButton = (TextView) findViewById(R.id.topButton);
      //   bottomButton = (TextView) findViewById(R.id.bottomButton);
 
 
-        topButton.setText("dwdwddwd");
+     //   topButton.setText("dwdwddwd");
       //  bottomButton.setText(msgText2);
 
 
-        toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+       /* toggle.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if(isChecked){
@@ -68,7 +68,7 @@ public class CustomDialog extends Dialog implements
 
 
 
-        topButton.setOnClickListener(this);
+        topButton.setOnClickListener(this);*/
     //    bottomButton.setOnClickListener(this);
 
 

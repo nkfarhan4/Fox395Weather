@@ -119,8 +119,14 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         imgSettings.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent i = new Intent(MainActivity.this, AdLocation.class);
-                startActivity(i);
+
+
+               CustomDialog dialog = new CustomDialog(MainActivity.this,0);
+                dialog.show();
+
+
+               /* Intent i = new Intent(MainActivity.this, AdLocation.class);
+                startActivity(i);*/
             }
         });
 
