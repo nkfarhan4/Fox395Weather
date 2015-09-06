@@ -95,6 +95,12 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         toolbar.setNavigationIcon(R.mipmap.ic_launcher);*/
 
 
+        Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/akadora.ttf");
+
+
+        TextView txtTitle = (TextView)findViewById(R.id.txtTitle);
+        txtTitle.setTypeface(tf,Typeface.NORMAL);
+
         ic_action_settings= (ImageView) findViewById(R.id.imgSettings);
         txtTime= (TextView) findViewById(R.id.txtTime);
         setDateandTime();
