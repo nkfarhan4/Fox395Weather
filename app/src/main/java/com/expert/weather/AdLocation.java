@@ -89,7 +89,7 @@ public class AdLocation extends ActionBarActivity {
 //            toolbar.setLogo(R.drawable.logo);
             setSupportActionBar(toolbar);
         }
-        toolbar.setNavigationIcon(R.mipmap.ic_launcher);
+     //   toolbar.setNavigationIcon(R.drawable.status_weather_clear_icon);
         ImageView imgRefresh = (ImageView)toolbar.findViewById(R.id.imgRefresh);
         imgRefresh.setOnClickListener(new View.OnClickListener() {
             @Override
