@@ -121,8 +121,23 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             public void onClick(View view) {
 
 
-               CustomDialog dialog = new CustomDialog(MainActivity.this,0);
+               final CustomDialog dialog = new CustomDialog(MainActivity.this,0);
                 dialog.show();
+                dialog.setResponse(new CustomDialog.CustomDialogInterface() {
+                    @Override
+                    public void okButton(String place) {
+                        dialog.dismiss();
+                        mEtAreaOfCity.setText(place);
+                                String _location = place;
+                        searchByPlaceName(_location);
+                        showProgressDialog();
+                    }
+
+                    @Override
+                    public void removeButton(int pos) {
+
+                    }
+                });
 
 
                /* Intent i = new Intent(MainActivity.this, AdLocation.class);

@@ -47,8 +47,7 @@ import java.util.List;
 /**
  * Created by Android on 21-04-2015.
  */
-public class CustomDialog extends Dialog implements
-        android.view.View.OnClickListener {
+public class CustomDialog extends Dialog {
     CustomDialogInterface customDialogInterface;
     public Activity ctx;
     public Dialog d;
@@ -181,20 +180,7 @@ public class CustomDialog extends Dialog implements
         placeList.add(placeNAme);
     }
 
-    @Override
-    public void onClick(View v) {
-        switch (v.getId()) {
-            case R.id.topButton:
-                customDialogInterface.topButton();
-                break;
-         /*   case R.id.bottomButton:
-                customDialogInterface.bottomButton();
-                break;*/
-            default:
-                break;
-        }
-        dismiss();
-    }
+
     private class CustomAdapter extends BaseAdapter {
 
         private Context _ctx;
@@ -221,7 +207,7 @@ public class CustomDialog extends Dialog implements
         }
 
         @Override
-        public View getView(int i, View view, ViewGroup viewGroup) {
+        public View getView(final int i, View view, ViewGroup viewGroup) {
             LayoutInflater mInflater = (LayoutInflater)
                     _ctx.getSystemService(Activity.LAYOUT_INFLATER_SERVICE);
             View convertView = mInflater.inflate(R.layout.row_item, null);
@@ -230,22 +216,68 @@ public class CustomDialog extends Dialog implements
 
             txtCityName.setText(values.get(i));
 
+            convertView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customDialogInterface.okButton(values.get(i));
+                }
+            });
+
+
+            imgRemove.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    customDialogInterface.removeButton(i);
+
+                    db.open();
+                    db.deleteRecord(values.get(i));
+                    db.close();
+
+                    getOldValues1();
+                }
+            });
+
             return convertView;
         }
+
+
+
+        private void getOldValues1(){
+            placeList = new ArrayList<>();
+
+            try {
+                db.open();
+                Cursor c = db.getALLLIST();
+                if (c.moveToFirst()) {
+                    do {
+                        FetchData(c);
+                    } while (c.moveToNext());
+                }
+                db.close();
+
+
+                adapter  = new CustomAdapter(ctx, placeList);
+                listView.setAdapter(adapter);
+                adapter.notifyDataSetChanged();
+            } catch (Exception e) {
+                Log.e("### Exc", e.toString());
+            }
+
+
+
+        }
+
     }
 
 
     public interface CustomDialogInterface {
 
 
-        public void topButton();
+        public void okButton(String place);
+
+        public void removeButton(int pos);
 
 
-        public void tempFarehn();
-
-        public void tempCelsius();
-
-        public void bottomButton();
 
     }
 

@@ -132,6 +132,14 @@ public class DBAdapter {
         return db.insert("CITY", null, initialValues);
     }
 
+
+    public long deleteRecord(String name) {
+
+        Log.e("record deltetd", "ok");
+
+        return db.delete("CITY", "place" + " = ?", new String[] {name});
+    }
+
     /*"place text," +
             "mainTemp text," +
             "tempCode text," +
