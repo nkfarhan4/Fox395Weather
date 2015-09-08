@@ -1,0 +1,98 @@
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:layout_gravity="center"
+    android:gravity="center"
+    android:background="#80000000"
+    android:id="@+id/t1"
+    tools:context="com.example.android.parvarish_nutricalculator.ui.AddRecipeManualScreen">
+    <LinearLayout
+        android:background="#ffffff"
+        android:layout_marginBottom="20dp"
+        android:layout_marginLeft="20dp"
+        android:layout_marginRight="20dp"
+        android:layout_marginTop="20dp"
+        android:padding="16dp"
+        android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+
+
+
+
+
+        <View
+            android:layout_marginTop="5dp"
+            android:layout_marginLeft="24dp"
+            android:layout_marginRight="24dp"
+            android:background="#ffffff"
+            android:layout_width="match_parent"
+            android:layout_height="3dp"/>
+
+
+
+
+        <LinearLayout
+            android:paddingLeft="10dp"
+            android:layout_weight="1"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <LinearLayout
+                android:orientation="horizontal"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:textSize="16dp"
+                    android:textColor="#494949"
+                    android:textStyle="bold"
+                    android:text="Temprature in "
+                    android:layout_weight="1"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content" />
+
+                <ToggleButton
+                    android:id="@+id/toggle"
+                    android:checked="true"
+                    android:textOff="\u2109"
+                    android:textOn="\u2103"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content" />
+
+
+            </LinearLayout>
+
+            <EditText
+                android:layout_marginTop="15dp"
+                android:id="@+id/edBabyName"
+                android:hint="Name"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content" />
+
+
+            <EditText
+                android:layout_marginTop="15dp"
+                android:id="@+id/edBabyDOB"
+                android:hint="Date of Birth"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+
+        <Button
+            android:textColor="#fff"
+            android:layout_marginTop="20dp"
+            android:id="@+id/topButton"
+            android:text="Save Changes"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content" />
+
+
+    </LinearLayout>
+</LinearLayout><!-- From: file:/E:/AndroidProjects/WeatherExpert/app/src/main/res/layout/custom_alert_dialog.xml -->
