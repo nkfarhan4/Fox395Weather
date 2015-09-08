@@ -1,4 +1,12 @@
 <resources>
+
+    <style name="AlertDialogCustom" parent="AppTheme">
+        <item name="android:windowIsTranslucent">true</item>
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:backgroundDimEnabled">false</item>
+</style>
+
+
     <style name="AppTheme" parent="AppTheme.Base">
 
     </style>

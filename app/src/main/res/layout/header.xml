@@ -39,7 +39,7 @@
         android:layout_height="wrap_content" />
 
     <ImageView
-        android:layout_marginRight="8dp"
+        android:layout_marginRight="16dp"
         android:layout_gravity="center"
         android:id="@+id/ic_location"
         android:src="@drawable/ic_location"

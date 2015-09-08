@@ -18,6 +18,7 @@ import android.provider.Settings;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
+import android.support.v7.internal.view.ContextThemeWrapper;
 import android.support.v7.widget.Toolbar;
 import android.text.TextUtils;
 import android.util.Log;
@@ -75,6 +76,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     TextView txtTempMain;
     ToggleButton toggle;
     DBAdapter db;
+    LinearLayout linearTop;
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -101,7 +103,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         TextView txtTitle = (TextView)findViewById(R.id.txtTitle);
         txtTitle.setTypeface(tf,Typeface.BOLD);
-
+        linearTop = (LinearLayout) findViewById(R.id.linearTop);
         ic_action_settings= (ImageView) findViewById(R.id.imgSettings);
         txtTime= (TextView) findViewById(R.id.txtTime);
         setDateandTime();
@@ -372,7 +374,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         if (checkInternet()) {
             try {
-                String val = getIntent().getStringExtra("place");
+                linearTop.setVisibility(View.VISIBLE);
+                String val = "Delhi";
                 if (val.length() != 0) {
                     mEtAreaOfCity.setText(val);
                     String _location = mEtAreaOfCity.getText().toString();
@@ -385,8 +388,9 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             }
         } else        {
             Toast.makeText(MainActivity.this,"No Internet Connection",Toast.LENGTH_SHORT).show();
-
+            linearTop.setVisibility(View.GONE);
             final AlertDialog.Builder dialog = new AlertDialog.Builder(MainActivity.this);
+            dialog.setCancelable(false);
             dialog.setMessage("No Internet Connection !!! Do you want to enable your internet?");
             dialog.setPositiveButton(this.getResources().getString(R.string.sett), new DialogInterface.OnClickListener() {
                 @Override
@@ -433,21 +437,6 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
                 CITYNAME = cityName;
 
-
-               /* Toast.makeText(
-                        getApplicationContext(),
-                        "Mobile Location (NW): \nLatitude: " + latitude
-                                + "\nLongitude: " + longitude + "\ncityName:" + cityName + "\ncountryName:" + countryName,
-                        Toast.LENGTH_LONG).show();
-*/
-
-
-                      /*  Toast.makeText(
-                                getApplicationContext(),
-                                "Your Current city is :- "+CITYNAME,
-                                Toast.LENGTH_LONG).show();
-*/
-
                 mEtAreaOfCity.setText(CITYNAME);
 
 
@@ -457,12 +446,15 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                 Log.e("exc in taking n/w", e.toString());
             }
 
-
+            linearTop.setVisibility(View.GONE);
+            mWeatherInfosLayout.setVisibility(View.GONE);
             String _location = CITYNAME;
             searchByPlaceName(_location);
             showProgressDialog();
 
         } else {
+            linearTop.setVisibility(View.GONE);
+            mWeatherInfosLayout.setVisibility(View.GONE);
             mEtAreaOfCity.setText("Delhi");
             CITYNAME = "Delhi";
             String _location = CITYNAME;
@@ -864,8 +856,13 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
     private void showProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
+            linearTop.setVisibility(View.VISIBLE);
+            mWeatherInfosLayout.setVisibility(View.VISIBLE);
             mProgressDialog.cancel();
         }
+
+        mWeatherInfosLayout.setVisibility(View.GONE);
+        linearTop.setVisibility(View.GONE);
         mProgressDialog = new ProgressDialog(MainActivity.this);
 
         mProgressDialog.setMessage("Fetching Weather data... ");
@@ -876,6 +873,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     private void hideProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.cancel();
+            linearTop.setVisibility(View.VISIBLE);
+            mWeatherInfosLayout.setVisibility(View.VISIBLE);
         }
     }
 

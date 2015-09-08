@@ -408,7 +408,7 @@ public class CustomDialog extends Dialog {
             int[] to = new int[] { android.R.id.text1 };
 
             // Creating a SimpleAdapter for the AutoCompleteTextView
-            SimpleAdapter adapter = new SimpleAdapter(ctx, result, android.R.layout.simple_list_item_1, from, to);
+            SimpleAdapter adapter = new SimpleAdapter(ctx, result, R.layout.adapter_item, from, to);
 
             // Setting the adapter
             atvPlaces.setAdapter(adapter);

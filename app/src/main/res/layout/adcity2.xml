@@ -39,6 +39,8 @@
 
 
         <ListView
+            android:divider="@color/primarColor2"
+            android:dividerHeight="0.5dp"
             android:padding="8dp"
             android:id="@+id/listView"
             android:layout_width="match_parent"

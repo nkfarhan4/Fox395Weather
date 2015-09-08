@@ -10,6 +10,7 @@
 
 
     <LinearLayout
+        android:layout_marginTop="16dp"
         android:layout_weight="1"
         android:gravity="center"
         android:layout_gravity="center"
@@ -18,16 +19,19 @@
         android:layout_height="wrap_content"
         android:layout_margin="10dp" >
         <TextView
+            android:layout_marginTop="8dp"
             android:textColor="@color/primarColor2"
             android:layout_gravity="center"
             android:gravity="center"
             android:textStyle="bold"
             android:id="@+id/txtDate"
+            android:textSize="18dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="09" />
 
         <TextView
+            android:layout_marginTop="8dp"
             android:textColor="@color/primarColor2"
             android:visibility="gone"
             android:layout_gravity="center"
@@ -40,11 +44,14 @@
 
 
         <ImageView
+            android:layout_marginTop="8dp"
             android:id="@+id/imageview_forecast_info"
             android:layout_width="40dp"
             android:layout_height="40dp" />
 
         <TextView
+            android:textSize="16dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/primarColor2"
             android:layout_gravity="center"
             android:gravity="center"
@@ -54,6 +61,8 @@
             android:text="+91" />
 
         <TextView
+            android:textSize="16dp"
+            android:layout_marginTop="8dp"
             android:textColor="@color/primarColor2"
             android:layout_gravity="center"
             android:gravity="center"
