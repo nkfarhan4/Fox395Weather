@@ -130,7 +130,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                     public void okButton(String place) {
                         dialog.dismiss();
                         mEtAreaOfCity.setText(place);
-                                String _location = place;
+                        String _location = place;
                         searchByPlaceName(_location);
                         showProgressDialog();
                     }
@@ -148,14 +148,22 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         });
 
 
+        ImageView imgRate = (ImageView)findViewById(R.id.imgRate);
+        imgRate.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                showalertBox();
+            }
+        });
+
  txtTempMain.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 // 0 for C
                 // 1 for F
 
-showalertBox();
-               /* if (flagTemp == 0) {
+
+               if (flagTemp == 0) {
                     txtTempMain.setText("\u2109");
                     flagTemp = 1;
                     String _location = mEtAreaOfCity.getText().toString();
@@ -167,7 +175,7 @@ showalertBox();
                     String _location = mEtAreaOfCity.getText().toString();
                     searchByPlaceName(_location);
                     showProgressDialog();
-                }*/
+                }
             }
         });
 

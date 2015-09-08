@@ -59,13 +59,26 @@
 
 </LinearLayout>
 
-
+<LinearLayout
+    android:orientation="horizontal"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
     <TextView
         android:id="@+id/txtTime"
         android:layout_marginTop="8dp"
         android:layout_marginLeft="12dp"
         android:textColor="#fff"
+        android:layout_weight="1"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
+    <ImageView
+        android:background="@drawable/default_button_selector"
+        android:layout_gravity="center"
+        android:src="@drawable/ic_action_star_rate"
+        android:id="@+id/imgRate"
+        android:layout_marginRight="2dp"
+        android:layout_width="42dp"
+        android:layout_height="42dp" />
+</LinearLayout>
 
 </LinearLayout>

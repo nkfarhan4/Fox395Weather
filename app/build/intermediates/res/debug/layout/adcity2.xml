@@ -20,7 +20,9 @@
 
         <com.expert.weather.CustomAutoCompleteTextView
             android:textColor="#494949"
-            android:padding="12dp"
+            android:padding="10dp"
+
+            android:drawableRight="@drawable/ic_remove"
             android:background="@drawable/roundsquare3"
             android:hint="Enter Place Here"
             android:id="@+id/atv_places"
@@ -41,7 +43,6 @@
         <ListView
             android:divider="@color/primarColor2"
             android:dividerHeight="0.5dp"
-            android:padding="8dp"
             android:id="@+id/listView"
             android:layout_width="match_parent"
             android:layout_height="match_parent"></ListView>
