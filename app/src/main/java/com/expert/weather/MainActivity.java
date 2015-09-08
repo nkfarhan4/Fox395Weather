@@ -154,8 +154,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                 // 0 for C
                 // 1 for F
 
-
-                if (flagTemp == 0) {
+showalertBox();
+               /* if (flagTemp == 0) {
                     txtTempMain.setText("\u2109");
                     flagTemp = 1;
                     String _location = mEtAreaOfCity.getText().toString();
@@ -167,7 +167,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                     String _location = mEtAreaOfCity.getText().toString();
                     searchByPlaceName(_location);
                     showProgressDialog();
-                }
+                }*/
             }
         });
 
@@ -411,6 +411,11 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         }
     }
 
+
+    private void showalertBox(){
+        CustomDialogBoxRate box = new CustomDialogBoxRate(MainActivity.this);
+        box.show();
+    }
 
     public void getCellTowerInfo() {
 
