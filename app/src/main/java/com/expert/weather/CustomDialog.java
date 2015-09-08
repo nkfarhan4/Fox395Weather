@@ -363,6 +363,7 @@ public class CustomDialog extends Dialog {
             return data;
         }
 
+
         @Override
         protected void onPostExecute(String result) {
             super.onPostExecute(result);
