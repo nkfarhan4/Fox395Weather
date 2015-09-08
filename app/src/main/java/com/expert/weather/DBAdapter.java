@@ -113,7 +113,7 @@ public class DBAdapter {
 
 
     public Cursor getALLLIST() throws SQLException {
-        String selectQuery = "SELECT * FROM CITY";
+        String selectQuery = "SELECT * FROM CITY ORDER BY _id DESC";
         Cursor cursor = db.rawQuery(selectQuery, null);
         return cursor;
     }
