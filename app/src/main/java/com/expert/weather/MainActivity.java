@@ -406,6 +406,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                     editor2.putString("date", dateFormat.format(dt));
                     editor2.commit();
 
+                    Log.e("## Cur Date", "" + dateFormat.format(dt));
+
                 } else {
 
                     try {
@@ -423,14 +425,28 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                         DateTime jodaOldDate = new DateTime(olddt);
                         DateTime jodaNewDate = new DateTime(newdt);
 
-                        if(Minutes.minutesBetween(jodaOldDate, jodaNewDate).getMinutes() % 60 >=2){
+                        Log.e("## time diff",""+Minutes.minutesBetween(jodaOldDate, jodaNewDate).getMinutes() % 60);
+
+                        if(Minutes.minutesBetween(jodaOldDate, jodaNewDate).getMinutes() % 60 >=10){
                             if (val.length() != 0) {
                                 mEtAreaOfCity.setText(val);
                                 String _location = mEtAreaOfCity.getText().toString();
                                 searchByPlaceName(_location);
                                 showProgressDialog();
 
+                                DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                                Date dt = new Date();
+
+                                SharedPreferences.Editor editor2 = getSharedPreferences("user-pref", MODE_PRIVATE).edit();
+                                editor2.putString("date", dateFormat2.format(dt));
+                                editor2.commit();
+
+                                Log.e("## Cur Date chng", "" + dateFormat.format(dt));
+
                             }
+
+
+
                         }
 
 
