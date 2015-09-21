@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.graphics.Typeface;
 import android.location.Address;
@@ -40,10 +41,13 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.InterstitialAd;
 
+import org.joda.time.DateTime;
+import org.joda.time.Minutes;
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.w3c.dom.Node;
 
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Date;
@@ -380,15 +384,59 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     protected void onResume() {
         super.onResume();
 
+
         if (checkInternet()) {
             try {
                 linearTop.setVisibility(View.VISIBLE);
                 String val = "Delhi";
-                if (val.length() != 0) {
-                    mEtAreaOfCity.setText(val);
-                    String _location = mEtAreaOfCity.getText().toString();
-                    searchByPlaceName(_location);
-                    showProgressDialog();
+
+                SharedPreferences settings = getSharedPreferences("PREFS_NAME", 0);
+                boolean mboolean = settings.getBoolean("FIRST_RUN", false);
+                if (!mboolean) {
+                    // do the thing for the first time
+                    settings = getSharedPreferences("PREFS_NAME", 0);
+                    SharedPreferences.Editor editor = settings.edit();
+                    editor.putBoolean("FIRST_RUN", true);
+                    editor.commit();
+
+                    DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+                    Date dt = new Date();
+
+                    SharedPreferences.Editor editor2 = getSharedPreferences("user-pref", MODE_PRIVATE).edit();
+                    editor2.putString("date", dateFormat.format(dt));
+                    editor2.commit();
+
+                } else {
+
+                    try {
+                        SharedPreferences prefs = getSharedPreferences("user-pref", MODE_PRIVATE);
+
+                        DateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
+
+                        String oldDate = prefs.getString("date", null);
+                        Date newdt =  dateFormat.parse(dateFormat.format(new Date()));
+                        Date olddt = dateFormat.parse(oldDate);
+
+                        Log.e("## OLD Date",""+olddt);
+                        Log.e("## New Date",""+newdt);
+
+                        DateTime jodaOldDate = new DateTime(olddt);
+                        DateTime jodaNewDate = new DateTime(newdt);
+
+                        if(Minutes.minutesBetween(jodaOldDate, jodaNewDate).getMinutes() % 60 >=2){
+                            if (val.length() != 0) {
+                                mEtAreaOfCity.setText(val);
+                                String _location = mEtAreaOfCity.getText().toString();
+                                searchByPlaceName(_location);
+                                showProgressDialog();
+
+                            }
+                        }
+
+
+                    }catch (Exception e){
+                        Log.e("## EXc",e.toString());
+                    }
 
                 }
             } catch (Exception e) {
@@ -814,7 +862,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     public void onFailConnection(final Exception e) {
         // TODO Auto-generated method stub
         setNoResultLayout();
-        Toast.makeText(getApplicationContext(), "Fail Connection", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(), "Fail Connection", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -822,7 +870,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     public void onFailParsing(final Exception e) {
         // TODO Auto-generated method stub
         setNoResultLayout();
-        Toast.makeText(getApplicationContext(), "Fail Parsing", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(), "Fail Parsing", Toast.LENGTH_SHORT).show();
     }
 
 
@@ -830,7 +878,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     public void onFailFindLocation(final Exception e) {
         // TODO Auto-generated method stub
         setNoResultLayout();
-        Toast.makeText(getApplicationContext(), "Fail Find Location", Toast.LENGTH_SHORT).show();
+       // Toast.makeText(getApplicationContext(), "Fail Find Location", Toast.LENGTH_SHORT).show();
     }
 
 
