@@ -104,6 +104,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         Typeface tf = Typeface.createFromAsset(getAssets(), "fonts/akadora.ttf");
 
+        mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
         TextView txtTitle = (TextView)findViewById(R.id.txtTitle);
         txtTitle.setTypeface(tf,Typeface.BOLD);
@@ -245,7 +246,6 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         });
 
 
-        mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
         getCellTowerInfo();
 
@@ -387,7 +387,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         if (checkInternet()) {
             try {
-                linearTop.setVisibility(View.VISIBLE);
+               // linearTop.setVisibility(View.VISIBLE);
                 String val = "Delhi";
 
                 SharedPreferences settings = getSharedPreferences("PREFS_NAME", 0);
@@ -933,8 +933,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
     private void showProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
-            linearTop.setVisibility(View.VISIBLE);
-            mWeatherInfosLayout.setVisibility(View.VISIBLE);
+          //  linearTop.setVisibility(View.VISIBLE);
+         //  mWeatherInfosLayout.setVisibility(View.VISIBLE);
             mProgressDialog.cancel();
         }
 
