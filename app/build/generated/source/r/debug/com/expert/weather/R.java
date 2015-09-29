@@ -2203,6 +2203,7 @@ containing a value of this type.
     }
     public static final class menu {
         public static final int menu_main=0x7f0e0000;
+        public static final int menu_main2=0x7f0e0001;
     }
     public static final class mipmap {
         public static final int ic_launcher=0x7f030000;
@@ -2273,8 +2274,9 @@ containing a value of this type.
         public static final int status_bar_notification_info_overflow=0x7f07003c;
         public static final int store_picture_message=0x7f07003d;
         public static final int store_picture_title=0x7f07003e;
+        public static final int title_activity_main2=0x7f07003f;
         public static final int wallet_buy_button_place_holder=0x7f07002c;
-        public static final int yes=0x7f07003f;
+        public static final int yes=0x7f070040;
     }
     public static final class style {
         public static final int AlertDialog_AppCompat=0x7f090073;

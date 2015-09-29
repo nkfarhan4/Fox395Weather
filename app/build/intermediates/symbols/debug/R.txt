@@ -776,6 +776,7 @@ int layout select_dialog_multichoice_material 0x7f04002e
 int layout select_dialog_singlechoice_material 0x7f04002f
 int layout support_simple_spinner_dropdown_item 0x7f040030
 int menu menu_main 0x7f0e0000
+int menu menu_main2 0x7f0e0001
 int mipmap ic_launcher 0x7f030000
 int raw gtm_analytics 0x7f060000
 int string Cancel 0x7f07002d
@@ -840,8 +841,9 @@ int string sett 0x7f07003b
 int string status_bar_notification_info_overflow 0x7f07003c
 int string store_picture_message 0x7f07003d
 int string store_picture_title 0x7f07003e
+int string title_activity_main2 0x7f07003f
 int string wallet_buy_button_place_holder 0x7f07002c
-int string yes 0x7f07003f
+int string yes 0x7f070040
 int style AlertDialog_AppCompat 0x7f090073
 int style AlertDialog_AppCompat_Light 0x7f090074
 int style AlertDialogCustom 0x7f090075

@@ -400,7 +400,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
         if (checkInternet()) {
             try {
-                linearTop.setVisibility(View.VISIBLE);
+                //linearTop.setVisibility(View.VISIBLE);
                 String val = "Delhi";
 
                 SharedPreferences settings = getSharedPreferences("PREFS_NAME", 0);
