@@ -401,7 +401,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         if (checkInternet()) {
             try {
                 //linearTop.setVisibility(View.VISIBLE);
-                String val = "Delhi";
+                String val = "Jaipur";
 
                 SharedPreferences settings = getSharedPreferences("PREFS_NAME", 0);
                 boolean mboolean = settings.getBoolean("FIRST_RUN", false);
@@ -442,10 +442,13 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
                         if(Minutes.minutesBetween(jodaOldDate, jodaNewDate).getMinutes() % 60 >=10){
                             if (val.length() != 0) {
-                                mEtAreaOfCity.setText(val);
-                                String _location = mEtAreaOfCity.getText().toString();
-                                searchByPlaceName(_location);
-                                showProgressDialog();
+
+                                getCellTowerInfo();
+
+                                //mEtAreaOfCity.setText(val);
+                                //String _location = mEtAreaOfCity.getText().toString();
+                                //searchByPlaceName(_location);
+                                //showProgressDialog();
 
                                 DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                                 Date dt = new Date();
@@ -505,8 +508,6 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
     public void getCellTowerInfo() {
 
         AppLocationService appLocationService = new AppLocationService(MainActivity.this);
-
-
         nwLocation = appLocationService.getLocation(LocationManager.NETWORK_PROVIDER);
 
 
@@ -545,8 +546,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         } else {
             linearTop.setVisibility(View.GONE);
             mWeatherInfosLayout.setVisibility(View.GONE);
-            mEtAreaOfCity.setText("Delhi");
-            CITYNAME = "Delhi";
+            mEtAreaOfCity.setText("Bhopal");
+            CITYNAME = "Bhopal";
             String _location = CITYNAME;
             searchByPlaceName(_location);
             showProgressDialog();
