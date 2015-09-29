@@ -115,6 +115,12 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         txtTempMain = (TextView) findViewById(R.id.txtTempMain);
         ImageView ic_location = (ImageView) findViewById(R.id.ic_location);
 
+        mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
+
+
+        mWeatherInfosLayout.setVisibility(View.GONE);
+        linearTop.setVisibility(View.GONE);
+
         ic_location.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -162,27 +168,27 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         });
 
  txtTempMain.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                // 0 for C
-                // 1 for F
+     @Override
+     public void onClick(View v) {
+         // 0 for C
+         // 1 for F
 
 
-               if (flagTemp == 0) {
-                    txtTempMain.setText("\u2109");
-                    flagTemp = 1;
-                    String _location = mEtAreaOfCity.getText().toString();
-                    searchByPlaceName(_location);
-                    showProgressDialog();
-                } else {
-                    txtTempMain.setText("\u2103");
-                    flagTemp = 0;
-                    String _location = mEtAreaOfCity.getText().toString();
-                    searchByPlaceName(_location);
-                    showProgressDialog();
-                }
-            }
-        });
+         if (flagTemp == 0) {
+             txtTempMain.setText("\u2109");
+             flagTemp = 1;
+             String _location = mEtAreaOfCity.getText().toString();
+             searchByPlaceName(_location);
+             showProgressDialog();
+         } else {
+             txtTempMain.setText("\u2103");
+             flagTemp = 0;
+             String _location = mEtAreaOfCity.getText().toString();
+             searchByPlaceName(_location);
+             showProgressDialog();
+         }
+     }
+ });
 
         mYahooWeather.setExceptionListener(this);
 
@@ -208,6 +214,10 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         interstitial = new InterstitialAd(MainActivity.this);
         interstitial.setAdUnitId("ca-app-pub-1878227272753934/8361723600");
 
+
+
+        mWeatherInfosLayout.setVisibility(View.GONE);
+        linearTop.setVisibility(View.GONE);
 
         AdView adView = (AdView) this.findViewById(R.id.adView);
         // Request for Ads
@@ -245,6 +255,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
             }
         });
 
+
+        mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
 
         getCellTowerInfo();
@@ -385,9 +397,10 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         super.onResume();
 
 
+
         if (checkInternet()) {
             try {
-               // linearTop.setVisibility(View.VISIBLE);
+                linearTop.setVisibility(View.VISIBLE);
                 String val = "Delhi";
 
                 SharedPreferences settings = getSharedPreferences("PREFS_NAME", 0);
@@ -933,8 +946,8 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
     private void showProgressDialog() {
         if (mProgressDialog != null && mProgressDialog.isShowing()) {
-          //  linearTop.setVisibility(View.VISIBLE);
-         //  mWeatherInfosLayout.setVisibility(View.VISIBLE);
+            linearTop.setVisibility(View.VISIBLE);
+            mWeatherInfosLayout.setVisibility(View.VISIBLE);
             mProgressDialog.cancel();
         }
 

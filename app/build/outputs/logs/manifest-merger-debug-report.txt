@@ -189,7 +189,7 @@ uses-sdk
 INJECTED from AndroidManifest.xml:0:0 reason: use-sdk injection requested
 MERGED from com.android.support:appcompat-v7:22.2.0:20:5
 MERGED from com.android.support:support-v4:22.2.0:20:5
-MERGED from WeatherExpert2:yWeatherGetter4a:unspecified:7:5
+MERGED from WeatherExpert:yWeatherGetter4a:unspecified:7:5
 MERGED from com.google.android.gms:play-services:7.0.0:18:5
 MERGED from com.google.android.gms:play-services-ads:7.0.0:18:5
 MERGED from com.google.android.gms:play-services-base:7.0.0:18:5

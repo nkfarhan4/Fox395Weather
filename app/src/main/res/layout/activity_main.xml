@@ -52,6 +52,7 @@
 
 
             <LinearLayout
+                android:visibility="invisible"
                 android:id="@+id/linearTop"
                 android:layout_marginTop="8dp"
                 android:background="#ffff"
