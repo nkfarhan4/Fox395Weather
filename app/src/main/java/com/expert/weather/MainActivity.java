@@ -259,7 +259,7 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
         mWeatherInfosLayout = (LinearLayout) findViewById(R.id.weather_infos);
 
 
-        getCellTowerInfo();
+        checkGPS2();
 
 
     }
@@ -300,6 +300,42 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
 
 
     }
+
+
+
+    private void checkGPS2() {
+
+
+        LocationManager lm = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
+        boolean gps_enabled = false;
+
+        try {
+            gps_enabled = lm.isProviderEnabled(LocationManager.GPS_PROVIDER);
+        } catch (Exception ex) {
+        }
+
+
+        if (!gps_enabled) {
+            linearTop.setVisibility(View.GONE);
+            mWeatherInfosLayout.setVisibility(View.GONE);
+            mEtAreaOfCity.setText("India");
+            CITYNAME = "India";
+            String _location = CITYNAME;
+            searchByPlaceName(_location);
+            showProgressDialog();
+        } else {
+            Log.e("ELSE", "ELSE");
+
+
+            callLocation();
+            //new CallLocation(getActivity()).execute();
+        }
+    }
+
+
+
+
+
 
 
     private void checkGPS() {
@@ -443,13 +479,14 @@ public class MainActivity extends ActionBarActivity implements YahooWeatherInfoL
                         if(Minutes.minutesBetween(jodaOldDate, jodaNewDate).getMinutes() % 60 >=10){
                             if (val.length() != 0) {
 
-                                getCellTowerInfo();
 
-                                //mEtAreaOfCity.setText(val);
-                                //String _location = mEtAreaOfCity.getText().toString();
-                                //searchByPlaceName(_location);
-                                //showProgressDialog();
+                                checkGPS2();
 
+                                /*mEtAreaOfCity.setText(val);
+                                String _location = mEtAreaOfCity.getText().toString();
+                                searchByPlaceName(_location);
+                                showProgressDialog();
+*/
                                 DateFormat dateFormat2 = new SimpleDateFormat("dd/MM/yyyy HH:mm:ss");
                                 Date dt = new Date();
 
